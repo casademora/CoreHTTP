@@ -12,7 +12,7 @@
 		C7C669251D2231F5007ECF77 /* CoreHTTP.h in Headers */ = {isa = PBXBuildFile; fileRef = C7C669231D2231D4007ECF77 /* CoreHTTP.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C7C6692F1D223207007ECF77 /* HTTPHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C669261D223207007ECF77 /* HTTPHost.swift */; };
 		C7C669301D223207007ECF77 /* HTTPResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C669271D223207007ECF77 /* HTTPResource.swift */; };
-		C7C669311D223207007ECF77 /* HTTPResourceRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C669281D223207007ECF77 /* HTTPResourceRequest.swift */; };
+		C7C669311D223207007ECF77 /* HTTPRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C669281D223207007ECF77 /* HTTPRequest.swift */; };
 		C7C669321D223207007ECF77 /* HTTPAPIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C669291D223207007ECF77 /* HTTPAPIError.swift */; };
 		C7C669331D223207007ECF77 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C6692A1D223207007ECF77 /* HTTPMethod.swift */; };
 		C7C669341D223207007ECF77 /* HTTPHostRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C6692B1D223207007ECF77 /* HTTPHostRegistry.swift */; };
@@ -34,7 +34,7 @@
 		C7C669241D2231D4007ECF77 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C7C669261D223207007ECF77 /* HTTPHost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPHost.swift; sourceTree = "<group>"; };
 		C7C669271D223207007ECF77 /* HTTPResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPResource.swift; sourceTree = "<group>"; };
-		C7C669281D223207007ECF77 /* HTTPResourceRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPResourceRequest.swift; sourceTree = "<group>"; };
+		C7C669281D223207007ECF77 /* HTTPRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPRequest.swift; sourceTree = "<group>"; };
 		C7C669291D223207007ECF77 /* HTTPAPIError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPAPIError.swift; sourceTree = "<group>"; };
 		C7C6692A1D223207007ECF77 /* HTTPMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		C7C6692B1D223207007ECF77 /* HTTPHostRegistry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPHostRegistry.swift; sourceTree = "<group>"; };
@@ -87,7 +87,7 @@
 				C7C669381D22320D007ECF77 /* Support */,
 				C7C669261D223207007ECF77 /* HTTPHost.swift */,
 				C7C669271D223207007ECF77 /* HTTPResource.swift */,
-				C7C669281D223207007ECF77 /* HTTPResourceRequest.swift */,
+				C7C669281D223207007ECF77 /* HTTPRequest.swift */,
 				C759F9211D2263D60081C915 /* HTTPResponse.swift */,
 				C7C669291D223207007ECF77 /* HTTPAPIError.swift */,
 				C7C6692A1D223207007ECF77 /* HTTPMethod.swift */,
@@ -213,7 +213,7 @@
 				C7C669331D223207007ECF77 /* HTTPMethod.swift in Sources */,
 				C7C669341D223207007ECF77 /* HTTPHostRegistry.swift in Sources */,
 				C759F9241D226C150081C915 /* HTTPStatusCodes.swift in Sources */,
-				C7C669311D223207007ECF77 /* HTTPResourceRequest.swift in Sources */,
+				C7C669311D223207007ECF77 /* HTTPRequest.swift in Sources */,
 				C7C669351D223207007ECF77 /* Decoding.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

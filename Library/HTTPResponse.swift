@@ -18,18 +18,18 @@ func validateResponse(_ error: NSError?) -> (HTTPURLResponse?) -> Result<HTTPURL
   
     if let error = error
     {
-      return Result(error: .GeneralFailure(statusCode: httpResponse.httpStatusCode, error: error))
+      return Result(error: .Failure(statusCode: httpResponse.httpStatusCode, error: error))
     }
     return Result(httpResponse)
   }
 }
 
-func completionHandlerForRequest<R: HTTPResource where R.ErrorType == HTTPResponseError>(resource: R, completion: (Result<R.ResultType, R.ErrorType>) -> Void) -> (Data?, URLResponse?, NSError?) -> Void
+func completionHandlerForRequest<R: HTTPResource where R.ErrorType == HTTPResponseError>(resource: R, validate: ResponseValidationFunction, completion: (Result<R.ResultType, R.ErrorType>) -> Void) -> (Data?, URLResponse?, NSError?) -> Void
 {
   return { (data, response, error) in
     _ = Result(response as? HTTPURLResponse, failWith: .InvalidResponseType)
       >>- validateResponse(error)
-      >>- resource.validate(data)
+      >>- validate(data)
       >>- resource.parse
       >>- completion
   }

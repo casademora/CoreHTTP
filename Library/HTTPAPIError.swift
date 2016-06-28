@@ -23,15 +23,14 @@ public enum HTTPResponseError: HTTPAPIError
   case NoResponse
   case NoResponseData
   case InvalidResponseType
-  case GeneralFailure(statusCode: HTTPStatusCode, error: NSError?)
+  case Failure(statusCode: HTTPStatusCode, error: NSError?)
   
   case DecodingFailed(description: String, source: String) //TODO: show json parse error details
   case DeserializationFailure(message: String)
   case ParsingError(result: DecodeError)
-  case Failure(error: NSError)
   
   static func failure(_ response: HTTPURLResponse) -> HTTPResponseError
   {
-    return .GeneralFailure(statusCode: response.httpStatusCode, error: nil)
+    return .Failure(statusCode: response.httpStatusCode, error: nil)
   }
 }

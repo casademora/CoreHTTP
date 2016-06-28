@@ -31,7 +31,7 @@ public func request<R where R: HostedResource, R: HTTPResource, R.ErrorType == H
   }
   guard let request = requestForResource(resource: resource, host: hostToQuery, cachePolicy: cachePolicy, requestTimeout: requestTimeout) else { return }
   
-  let task = hostToQuery.session.dataTask(with: request, completionHandler: completionHandlerForRequest(resource: resource, completion: completion))
+  let task = hostToQuery.session.dataTask(with: request, completionHandler: completionHandlerForRequest(resource: resource, validate: hostToQuery.validate, completion: completion))
   task.resume()
   log(message: "Sending Request: \(request.url)")
 }
