@@ -36,31 +36,3 @@ public func request<R where R: HostedResource, R: HTTPResource, R.ErrorType == H
   log(message: "Sending Request: \(request.url)")
 }
 
-func logResponse(_ error: NSError?) -> (URLResponse?) -> Result<URLResponse, HTTPResponseError>
-{
-  return { response in
-    let httpResponse = response as? HTTPURLResponse
-    log(message: "Received Reponse: \(httpResponse?.statusCode) - \(response?.url) - \(httpResponse?.allHeaderFields)")
-    return Result(response, failWith: .NoResponse)
-  }
-}
-
-func checkResponse(_ data: Data?) -> (URLResponse) -> Result<Data, HTTPResponseError>
-{
-  return { response in
-    //    let httpResponse = response as? HTTPURLResponse
-    //    httpResponse?.statusCode
-    return Result(data, failWith: .NoResponseData)
-  }
-}
-
-func completionHandlerForRequest<R: HTTPResource where R.ErrorType == HTTPResponseError>(resource: R, completion: (Result<R.ResultType, R.ErrorType>) -> Void) -> (Data?, URLResponse?, NSError?) -> Void
-{
-  return { (data, response, error) in
-      _ = Result(response, failWith: .Unknown)
-          >>- logResponse(error)
-          >>- checkResponse(data)
-          >>- resource.parse
-          >>- completion
-  }
-}

@@ -47,7 +47,7 @@ func deserializeJSON(data: Data) -> Result<AnyObject, HTTPResponseError>
   catch let error as NSError
   {
     log(message: "Unable to deserialize JSON: \(error)")
-    return Result(error: .ParserError(error: error))
+    return Result(error: .DeserializationFailure(message: error.localizedDescription))
   }
 }
 
@@ -60,7 +60,7 @@ func serializeJSON(object: AnyObject) -> Result<Data, HTTPResponseError>
   catch let error as NSError
   {
     log(message: "Unable to serialize JSON: \(error)")
-    return Result(error: .ParserError(error: error))
+    return Result(error: .DeserializationFailure(message: error.localizedDescription))
   }
 }
 

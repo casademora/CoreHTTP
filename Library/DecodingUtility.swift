@@ -18,7 +18,7 @@ extension URL: Decodable
     }
     else
     {
-      return .Failure(.TypeMismatch(expected: "URL", actual: ""))
+      return .Failure(.TypeMismatch(expected: "URL", actual: json.description))
     }
   }
 }
