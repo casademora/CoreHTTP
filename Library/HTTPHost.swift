@@ -19,7 +19,7 @@ public class HTTPHost: HTTPHostProtocol
   public let session: URLSession
   public private(set) var baseURLString: String
   
-  init(baseURLString: String, session: URLSession)
+  public init(baseURLString: String, session: URLSession)
   {
     self.baseURLString = baseURLString
     self.session = session

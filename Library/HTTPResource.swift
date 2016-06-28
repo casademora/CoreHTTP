@@ -37,7 +37,7 @@ public class JSONHTTPResource<T>: HTTPResource
   public let queryParameters: [String : String]
   public let parse: (Data) -> Result<T, HTTPResponseError>
   
-  init(path: String, method: HTTPMethod = QueriableHTTPMethod.GET, queryParameters: [String: String] = [:], parse: (Data) -> Result<T, HTTPResponseError>)
+  public init(path: String, method: HTTPMethod = QueriableHTTPMethod.GET, queryParameters: [String: String] = [:], parse: (Data) -> Result<T, HTTPResponseError>)
   {
     self.path = path
     self.method = method

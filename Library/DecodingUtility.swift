@@ -8,14 +8,6 @@
 
 import Argo
 
-
-func stringFrom(_ date: Date, format: String) -> String
-{
-  let formatter = DateFormatter()
-  formatter.dateFormat = format
-  return formatter.string(from: date)
-}
-
 extension URL: Decodable
 {
   public static func decode(_ json: JSON) -> Decoded<URL>
@@ -31,7 +23,7 @@ extension URL: Decodable
   }
 }
 
-func dateFrom(_ format: String) -> (String) -> Decoded<Date>
+public func dateFrom(_ format: String) -> (String) -> Decoded<Date>
 {
   let formatter = DateFormatter()
   formatter.dateFormat = format
@@ -43,4 +35,11 @@ func dateFrom(_ format: String) -> (String) -> Decoded<Date>
       return .Failure(.TypeMismatch(expected: "Date", actual: dateToFormat))
     }
   }
+}
+
+public func stringFrom(_ date: Date, format: String) -> String
+{
+  let formatter = DateFormatter()
+  formatter.dateFormat = format
+  return formatter.string(from: date)
 }
