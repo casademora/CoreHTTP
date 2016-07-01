@@ -10,7 +10,7 @@ import Foundation
 
 struct HostRegistry
 {
-  var collection: Set<HTTPHost> = Set()
+  private var collection: Set<HTTPHost> = Set()
   
   private init() {}
   
@@ -59,5 +59,20 @@ extension Int
   var seconds: TimeInterval
   {
     return TimeInterval(self)
+  }
+  
+  var minutes: TimeInterval
+  {
+    return TimeInterval(self * 60)
+  }
+  
+  var hours: TimeInterval
+  {
+    return minutes * 60
+  }
+  
+  var days: TimeInterval
+  {
+    return hours * 24
   }
 }
