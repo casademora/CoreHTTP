@@ -183,14 +183,15 @@ enum UnofficialStatusCode: Int, HTTPStatusCodeProtocol
   //  case RequestHasBeenForbiddenByAntivirus = 499
   case BandwidthLimitExceeded = 509
   case SiteIsFrozen = 530
+  
+  static let allStatusCodes: [UnofficialStatusCode] = [.Checkpoint, .EnhaceYourCalm, .BlockedByWindowsParentalControls, .InvalidToken_Ersi, .TokenRequired_Ersi, .BandwidthLimitExceeded, .SiteIsFrozen]
 }
 
 extension HTTPStatusCode
 {
-  public var isUnofficialStatusCode: Bool
+  public static func isUnofficial(statusCode: Int) -> Bool
   {
-    let statusCodes: [UnofficialStatusCode] = [.Checkpoint, .EnhaceYourCalm, .BlockedByWindowsParentalControls, .InvalidToken_Ersi, .TokenRequired_Ersi, .BandwidthLimitExceeded, .SiteIsFrozen]
-    return statusCodes.map { $0.code }.contains(code)
+    return UnofficialStatusCode.allStatusCodes.map { $0.code }.contains(statusCode)
   }
 }
 
@@ -205,9 +206,9 @@ enum InternetInformationServicesStatusCode: Int, HTTPStatusCodeProtocol
 
 extension HTTPStatusCode
 {
-  public var isInternetInformationServicesStatusCode: Bool
+  public static func isInternetInformationServices(statusCode: Int) -> Bool
   {
-    return InternetInformationServicesStatusCode.allStatusCodes.map { $0.code }.contains(code)
+    return InternetInformationServicesStatusCode.allStatusCodes.map { $0.code }.contains(statusCode)
   }
 }
 
@@ -224,9 +225,9 @@ enum NGinxStatusCode: Int, HTTPStatusCodeProtocol
 
 extension HTTPStatusCode
 {
-  public var isNGinxStatusCode: Bool
+  public static func isNGinx(statusCode: Int) -> Bool
   {
-    return NGinxStatusCode.allStatusCodes.map { $0.code }.contains(code)
+    return NGinxStatusCode.allStatusCodes.map { $0.code }.contains(statusCode)
   }
 }
 
@@ -245,8 +246,8 @@ enum CloudFlareStatusCode: Int, HTTPStatusCodeProtocol
 
 extension HTTPStatusCode
 {
-  public var isCloudFlareStatusCode: Bool
+  public static func isCloudFlare(statusCode: Int) -> Bool
   {
-    return CloudFlareStatusCode.allStatusCodes.map { $0.code }.contains(code)
+    return CloudFlareStatusCode.allStatusCodes.map { $0.code }.contains(statusCode)
   }
 }
