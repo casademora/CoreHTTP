@@ -1,4 +1,4 @@
 github "thoughtbot/Curry"
 github "thoughtbot/Runes" "gf-swift-3"
 github "thoughtbot/Argo" "master"
-github "antitypical/Result" "swift-3"
+github "antitypical/Result" "master"
