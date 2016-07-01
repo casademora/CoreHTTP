@@ -16,15 +16,16 @@ func validateResponse(_ error: NSError?) -> (HTTPURLResponse?) -> Result<HTTPURL
     
     log(message: "Received Response: \(httpResponse.statusCode) - \(httpResponse.url) - \(httpResponse.allHeaderFields)")
   
-    if let error = error
+    func transform(error: NSError) -> Result<HTTPURLResponse, HTTPResponseError>
     {
-      return Result(error: .Failure(statusCode: httpResponse.httpStatusCode, error: error))
+      return Result(error: error.code == NSURLErrorCancelled ? .Cancelled : .failure(httpResponse))
     }
-    return Result(httpResponse)
+    
+    return (error >>- transform) ?? Result(httpResponse)
   }
 }
 
-func completionHandlerForRequest<R: HTTPResource where R.ErrorType == HTTPResponseError>(resource: R, validate: ResponseValidationFunction, completion: (Result<R.ResultType, R.ErrorType>) -> Void) -> (Data?, URLResponse?, NSError?) -> Void
+func completionHandlerForRequest<R: HTTPResourceProtocol where R.ErrorType == HTTPResponseError>(resource: R, validate: ResponseValidationFunction, completion: (Result<R.ResultType, R.ErrorType>) -> Void) -> (Data?, URLResponse?, NSError?) -> Void
 {
   return { (data, response, error) in
     _ = Result(response as? HTTPURLResponse, failWith: .InvalidResponseType)

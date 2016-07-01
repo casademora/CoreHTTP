@@ -16,9 +16,9 @@ public protocol HostedResource
   var HostType: AnyClass { get }
 }
 
-public typealias ResourceParseFunction<T> = (Data) -> Result<T, HTTPResponseError>
+public typealias ResourceParseFunction<ResourceDataType> = (Data) -> Result<ResourceDataType, HTTPResponseError>
 
-public protocol HTTPResource
+public protocol HTTPResourceProtocol
 {
   associatedtype ResultType
   associatedtype ErrorType: HTTPAPIError
@@ -29,7 +29,7 @@ public protocol HTTPResource
   var parse: ResourceParseFunction<ResultType> { get }
 }
 
-public class JSONHTTPResource<T>: HTTPResource
+public class HTTPResource<T>: HTTPResourceProtocol
 {
   public typealias ResultType = T
   public typealias ErrorType = HTTPResponseError
