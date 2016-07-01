@@ -43,3 +43,13 @@ public func stringFrom(_ date: Date, format: String) -> String
   formatter.dateFormat = format
   return formatter.string(from: date)
 }
+
+public func stringFrom(format: String) -> (Date) -> String
+{
+  let formatter = DateFormatter()
+  formatter.dateFormat = format
+
+  return { date in
+    formatter.string(from: date)
+  }
+}
