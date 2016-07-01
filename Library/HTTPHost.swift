@@ -9,33 +9,42 @@
 import Result
 
 public typealias ResponseValidationFunction = (Data?) -> (HTTPURLResponse) -> Result<Data, HTTPResponseError>
+public typealias AuthenticateRequestFunction = (request: URLRequest) -> (URLRequest)
 
-public protocol HTTPHostProtocol: Hashable
+protocol HTTPHostProtocol: Hashable
 {
   var baseURLString: String { get }
   var baseURL: NSURL { get }
 
   var session: URLSession { get }
   var validate: ResponseValidationFunction { get }
+  var authenticate: AuthenticateRequestFunction? { get }
 }
 
 public class HTTPHost: HTTPHostProtocol
 {
   public let validate: ResponseValidationFunction
-  public let session: URLSession
-  public private(set) var baseURLString: String
+  public let authenticate: AuthenticateRequestFunction?
+  private let configuration: URLSessionConfiguration
+  public let baseURLString: String
   
-  public init(baseURLString: String, session: URLSession, validate: ResponseValidationFunction = defaultValidation)
+  public init(baseURLString: String, configuration: URLSessionConfiguration, validate: ResponseValidationFunction = defaultValidation, authenticate: AuthenticateRequestFunction? = nil)
   {
     self.baseURLString = baseURLString
-    self.session = session
+    self.configuration = configuration
     self.validate = validate
+    self.authenticate = authenticate
   }
+  
+  public lazy var session: URLSession = {
+      return URLSession(configuration: self.configuration, delegate: nil, delegateQueue: nil)
+  }()
+
 }
 
-extension HTTPHostProtocol
+extension HTTPHost: Hashable
 {
-  public var baseURL: NSURL
+  var baseURL: NSURL
   {
     return NSURL(string: baseURLString)!
   }
@@ -46,7 +55,7 @@ extension HTTPHostProtocol
   }
 }
 
-public func ==<H: HTTPHostProtocol>(lhs: H, rhs: H) -> Bool
+public func ==<H: HTTPHost>(lhs: H, rhs: H) -> Bool
 {
   return lhs.baseURLString == rhs.baseURLString
 }
