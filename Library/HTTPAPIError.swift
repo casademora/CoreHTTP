@@ -20,10 +20,11 @@ import Argo
 public enum HTTPResponseError: HTTPAPIError
 {
   case Unknown
+  case Cancelled
   case NoResponse
   case NoResponseData
   case InvalidResponseType
-  case Failure(statusCode: HTTPStatusCode, error: NSError?)
+  case Failure(statusCode: HTTPStatusCode, description: String)
   
   case DecodingFailed(description: String, source: String) //TODO: show json parse error details
   case DeserializationFailure(message: String)
@@ -31,6 +32,7 @@ public enum HTTPResponseError: HTTPAPIError
   
   static func failure(_ response: HTTPURLResponse) -> HTTPResponseError
   {
-    return .Failure(statusCode: response.httpStatusCode, error: nil)
+    let statusCode = response.httpStatusCode
+    return .Failure(statusCode: statusCode, description: statusCode.localizedDescription)
   }
 }
