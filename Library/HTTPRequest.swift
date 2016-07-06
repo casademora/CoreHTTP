@@ -61,7 +61,7 @@ public func request<R where R: HostedResource, R: HTTPResourceProtocol, R.ErrorT
 
 private func userAgentString() -> String
 {
-  let bundle = Bundle.main()
+  let bundle = Bundle.main
   let device = UIDevice.current()
   let screen = UIScreen.main()
   
