@@ -42,7 +42,7 @@ private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol where R.Err
   return host.authenticate?(request: requestToSend) ?? requestToSend
 }
 
-public func request<R where R: HostedResource, R: HTTPResourceProtocol, R.ErrorType == HTTPResponseError>(resource: R, cachePolicy: NSURLRequest.CachePolicy = defaultCachePolicy, requestTimeout: TimeInterval = defaultTimeout, host: HTTPHost? = nil, completion: (Result<R.ResultType, R.ErrorType>) -> Void) -> URLSessionTask?
+@discardableResult public func request<R where R: HostedResource, R: HTTPResourceProtocol, R.ErrorType == HTTPResponseError>(resource: R, cachePolicy: NSURLRequest.CachePolicy = defaultCachePolicy, requestTimeout: TimeInterval = defaultTimeout, host: HTTPHost? = nil, completion: (Result<R.ResultType, R.ErrorType>) -> Void) -> URLSessionTask?
 {
   guard let hostToQuery = host ?? hostRegistry.hostFor(resource) else {
     //TODO: throw an error here. No host configured is a programmer error
