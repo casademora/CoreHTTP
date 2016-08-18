@@ -24,7 +24,8 @@ private func process(request: URLRequest) -> URLRequest
   return request
 }
 
-private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol where R.ErrorType == HTTPResponseError>(resource: R, host: H, cachePolicy: URLRequest.CachePolicy, requestTimeout: TimeInterval) -> URLRequest?
+private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol>(resource: R, host: H, cachePolicy: URLRequest.CachePolicy, requestTimeout: TimeInterval) -> URLRequest?
+  where R.ErrorType == HTTPResponseError
 {
   guard var components = URLComponents(string: host.baseURLString) else { return nil }
   
@@ -39,21 +40,23 @@ private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol where R.Err
   originalRequest.httpMethod = resource.method.rawValue
   
   let requestToSend = process(request: originalRequest)
-  return host.authenticate?(request: requestToSend) ?? requestToSend
+  return host.authenticate?(requestToSend) ?? requestToSend
 }
 
-@discardableResult public func request<R where R: HostedResource, R: HTTPResourceProtocol, R.ErrorType == HTTPResponseError>(resource: R, cachePolicy: URLRequest.CachePolicy = defaultCachePolicy, requestTimeout: TimeInterval = defaultTimeout, host: HTTPHost? = nil, completion: (Result<R.ResultType, R.ErrorType>) -> Void) -> URLSessionTask?
+@discardableResult public func request<R>(resource: R, cachePolicy: URLRequest.CachePolicy = defaultCachePolicy, requestTimeout: TimeInterval = defaultTimeout, host: HTTPHost? = nil, completion: @escaping (Result<R.ResultType, R.ErrorType>) -> Void) -> URLSessionTask?
+  where R: HostedResource, R: HTTPResourceProtocol, R.ErrorType == HTTPResponseError
 {
   guard let hostToQuery = host ?? hostRegistry.hostFor(resource) else {
     //TODO: throw an error here. No host configured is a programmer error
     return nil
   }
   guard let request = requestFor(resource: resource, host: hostToQuery, cachePolicy: cachePolicy, requestTimeout: requestTimeout) else {
-    //TOD: throw an error here
+    //TOD): throw an error here
     return nil
   }
   
-  let task = hostToQuery.session.dataTask(with: request, completionHandler: completionHandlerForRequest(resource: resource, validate: hostToQuery.validate, completion: completion))
+  let completionHandler = completionHandlerForRequest(resource: resource, validate: hostToQuery.validate, completion: completion)
+  let task = hostToQuery.session.dataTask(with: request, completionHandler: completionHandler)
   task.resume()
   log(message: "Sending Request: \(request.url)")
   return task
@@ -62,8 +65,8 @@ private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol where R.Err
 private func userAgentString() -> String
 {
   let bundle = Bundle.main
-  let device = UIDevice.current()
-  let screen = UIScreen.main()
+  let device = UIDevice.current
+  let screen = UIScreen.main
   
   return "\(bundle.executableName))/\(bundle.bundleVersion) (\(device.model); iOS \(device.systemVersion); Scale/\(screen.scale)"
 }

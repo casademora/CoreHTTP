@@ -12,13 +12,13 @@ extension URL: Decodable
 {
   public static func decode(_ json: JSON) -> Decoded<URL>
   {
-    if case .String(let value) = json, let url = URL(string: value)
+    if case .string(let value) = json, let url = URL(string: value)
     {
-      return .Success(url)
+      return .success(url)
     }
     else
     {
-      return .Failure(.TypeMismatch(expected: "URL", actual: json.description))
+      return .failure(.typeMismatch(expected: "URL", actual: json.description))
     }
   }
 }
@@ -29,10 +29,10 @@ public func dateFrom(_ format: String) -> (String) -> Decoded<Date>
   formatter.dateFormat = format
   return { dateToFormat in
     if let date = formatter.date(from: dateToFormat) {
-      return .Success(date)
+      return .success(date)
     }
     else{
-      return .Failure(.TypeMismatch(expected: "Date", actual: dateToFormat))
+      return .failure(.typeMismatch(expected: "Date", actual: dateToFormat))
     }
   }
 }

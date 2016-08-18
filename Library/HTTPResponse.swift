@@ -7,31 +7,33 @@
 //
 
 import Result
-import Runes
 
-func validateResponse(_ error: NSError?) -> (HTTPURLResponse?) -> Result<HTTPURLResponse, HTTPResponseError>
+func validateResponse(_ error: Error?) -> (HTTPURLResponse?) -> Result<HTTPURLResponse, HTTPResponseError>
 {
   return { response in
     guard let httpResponse = response else { return Result(response, failWith: .NoResponse) }
     
     log(message: "Received Response: \(httpResponse.statusCode) - \(httpResponse.url) - \(httpResponse.allHeaderFields)")
   
-    func transform(error: NSError) -> Result<HTTPURLResponse, HTTPResponseError>
+    func transform(error: Error) -> Result<HTTPURLResponse, HTTPResponseError>
     {
-      return Result(error: error.code == NSURLErrorCancelled ? .Cancelled : .failure(httpResponse))
+      return Result(error: error._code == NSURLErrorCancelled ? .Cancelled : .failure(httpResponse))
     }
     
-    return (error >>- transform) ?? Result(httpResponse)
+    let returnValue = error.flatMap(transform)
+    return returnValue ?? Result(httpResponse)
   }
 }
 
-func completionHandlerForRequest<R: HTTPResourceProtocol where R.ErrorType == HTTPResponseError>(resource: R, validate: ResponseValidationFunction, completion: (Result<R.ResultType, R.ErrorType>) -> Void) -> (Data?, URLResponse?, NSError?) -> Void
+func completionHandlerForRequest<R: HTTPResourceProtocol>(resource: R, validate: ResponseValidationFunction, completion: @escaping (Result<R.ResultType, R.ErrorType>) -> Void) -> (Data?, URLResponse?, Error?) -> Void
+  where R.ErrorType == HTTPResponseError
 {
   return { (data, response, error) in
-    _ = Result(response as? HTTPURLResponse, failWith: .InvalidResponseType)
+    let lastValue = Result(response as? HTTPURLResponse, failWith: .InvalidResponseType)
       >>- validateResponse(error)
       >>- validate(data)
       >>- resource.parse
-      >>- completion
+    
+    return completion(lastValue)
   }
 }

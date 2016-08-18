@@ -60,7 +60,6 @@ public func ==<H: HTTPHost>(lhs: H, rhs: H) -> Bool
   return lhs.baseURLString == rhs.baseURLString
 }
 
-
 private func defaultValidation(data: Data?) -> (HTTPURLResponse) -> Result<Data, HTTPResponseError>
 {
   return { response in

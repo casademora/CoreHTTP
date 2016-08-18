@@ -6,7 +6,7 @@
 //  Copyright © 2016 Magical Panda Software. All rights reserved.
 //
 
-public protocol HTTPAPIError: ErrorProtocol
+public protocol HTTPAPIError: Error
 {
 }
 

@@ -1,0 +1,37 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "6B45497ABA8393E2DC9E80A6AF0081D366C274C5",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "6B45497ABA8393E2DC9E80A6AF0081D366C274C5" : 9223372036854775807,
+    "0A5C3A6DB1EA9211CEFA5384E9882B4D710699A4" : 9223372036854775807,
+    "956D2B21DD155C49504BB67697A67F7C5351A353" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "C604F87D-685B-4CE3-8353-A79EF376AEF7",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "6B45497ABA8393E2DC9E80A6AF0081D366C274C5" : "CoreHTTP\/",
+    "0A5C3A6DB1EA9211CEFA5384E9882B4D710699A4" : "Experiments\/Runes\/",
+    "956D2B21DD155C49504BB67697A67F7C5351A353" : "Experiments\/Result\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "CoreHTTP",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "CoreHTTP.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:casademora\/Runes.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "0A5C3A6DB1EA9211CEFA5384E9882B4D710699A4"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:casademora\/CoreHTTP.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6B45497ABA8393E2DC9E80A6AF0081D366C274C5"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:casademora\/Result.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "956D2B21DD155C49504BB67697A67F7C5351A353"
+    }
+  ]
+}

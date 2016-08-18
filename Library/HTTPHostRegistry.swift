@@ -12,11 +12,11 @@ struct HostRegistry
 {
   private var collection: Set<HTTPHost> = Set()
   
-  private init() {}
+  fileprivate init() {}
   
   func hostFor<Resource: HostedResource>(_ resource: Resource) -> HTTPHost?
   {
-    return collection.filter { $0.dynamicType == resource.HostType }.first
+    return collection.filter { type(of: $0) == resource.HostType }.first
   }
   
   mutating func register<Host: HTTPHost>(_ host: Host)

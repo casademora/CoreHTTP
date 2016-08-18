@@ -184,7 +184,7 @@ enum UnofficialStatusCode: Int, HTTPStatusCodeProtocol
   case BandwidthLimitExceeded = 509
   case SiteIsFrozen = 530
   
-  static let allStatusCodes: [UnofficialStatusCode] = [.Checkpoint, .EnhaceYourCalm, .BlockedByWindowsParentalControls, .InvalidToken_Ersi, .TokenRequired_Ersi, .BandwidthLimitExceeded, .SiteIsFrozen]
+  fileprivate static let allStatusCodes: [UnofficialStatusCode] = [.Checkpoint, .EnhaceYourCalm, .BlockedByWindowsParentalControls, .InvalidToken_Ersi, .TokenRequired_Ersi, .BandwidthLimitExceeded, .SiteIsFrozen]
 }
 
 extension HTTPStatusCode
@@ -201,7 +201,7 @@ enum InternetInformationServicesStatusCode: Int, HTTPStatusCodeProtocol
   case RetryWith = 449
   case Redirect = 451
   
-  private static let allStatusCodes: [InternetInformationServicesStatusCode] = [.LoginTimeout,  .RetryWith, .Redirect]
+  fileprivate static let allStatusCodes: [InternetInformationServicesStatusCode] = [.LoginTimeout,  .RetryWith, .Redirect]
 }
 
 extension HTTPStatusCode
@@ -220,7 +220,7 @@ enum NGinxStatusCode: Int, HTTPStatusCodeProtocol
   case HTTPRequestSentToHTTPSPort = 497
   case ClientClosedRequest = 499
   
-  private static let allStatusCodes: [NGinxStatusCode] = [.NoResponse, .SSLCertificateError, .SSLCertificateRequired, .HTTPRequestSentToHTTPSPort, .ClientClosedRequest]
+  fileprivate static let allStatusCodes: [NGinxStatusCode] = [.NoResponse, .SSLCertificateError, .SSLCertificateRequired, .HTTPRequestSentToHTTPSPort, .ClientClosedRequest]
 }
 
 extension HTTPStatusCode
@@ -241,7 +241,7 @@ enum CloudFlareStatusCode: Int, HTTPStatusCodeProtocol
   case SSLHandshakeFailed = 525
   case InvalidSSLCertificate = 526
   
-  private static let allStatusCodes: [CloudFlareStatusCode] = [.UnknownError, .WebServerIsDown, .ConnectionTimedOut, .OriginIsUnreachable, .ATimeoutOccured, .SSLHandshakeFailed, .InvalidSSLCertificate]
+  fileprivate static let allStatusCodes: [CloudFlareStatusCode] = [.UnknownError, .WebServerIsDown, .ConnectionTimedOut, .OriginIsUnreachable, .ATimeoutOccured, .SSLHandshakeFailed, .InvalidSSLCertificate]
 }
 
 extension HTTPStatusCode

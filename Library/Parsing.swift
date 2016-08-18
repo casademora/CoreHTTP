@@ -8,7 +8,6 @@
 
 import Result
 import Argo
-import Runes
 
 public func parse<T: Decodable>(data: Data) -> Result<T, HTTPResponseError> where T == T.DecodedType
 {
@@ -42,7 +41,7 @@ func deserializeJSON(data: Data) -> Result<AnyObject, HTTPResponseError>
 {
   do {
     let result = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions(rawValue: 0))
-    return Result(result)
+    return Result(result as AnyObject)
   }
   catch let error as NSError
   {
