@@ -9,7 +9,7 @@
 import Result
 
 public typealias ResponseValidationFunction = (Data?) -> (HTTPURLResponse) -> Result<Data, HTTPResponseError>
-public typealias AuthenticateRequestFunction = (request: URLRequest) -> (URLRequest)
+public typealias AuthenticateRequestFunction = (_ request: URLRequest) -> (URLRequest)
 
 protocol HTTPHostProtocol: Hashable
 {

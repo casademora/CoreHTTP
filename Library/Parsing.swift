@@ -10,13 +10,13 @@ import Result
 import Argo
 import Runes
 
-public func parse<T: Decodable where T == T.DecodedType>(data: Data) -> Result<T, HTTPResponseError>
+public func parse<T: Decodable>(data: Data) -> Result<T, HTTPResponseError> where T == T.DecodedType
 {
   let result = deserializeJSON(data: data)
   return result >>- decode
 }
 
-public func parse<T: Decodable where T == T.DecodedType>(rootKey: String) -> (Data) -> Result<T, HTTPResponseError>
+public func parse<T: Decodable>(rootKey: String) -> (Data) -> Result<T, HTTPResponseError> where T == T.DecodedType
 {
   return { data in
     let result = deserializeJSON(data: data)
@@ -24,13 +24,13 @@ public func parse<T: Decodable where T == T.DecodedType>(rootKey: String) -> (Da
   }
 }
 
-public func parse<T: Decodable where T == T.DecodedType>(data: Data) -> Result<[T], HTTPResponseError>
+public func parse<T: Decodable>(data: Data) -> Result<[T], HTTPResponseError> where T == T.DecodedType
 {
   return deserializeJSON(data: data)
     >>- decode
 }
 
-public func parse<T: Decodable where T == T.DecodedType>(rootKey: String) -> (Data) -> Result<[T], HTTPResponseError>
+public func parse<T: Decodable>(rootKey: String) -> (Data) -> Result<[T], HTTPResponseError> where T == T.DecodedType
 {
   return { data in
     return deserializeJSON(data: data)
