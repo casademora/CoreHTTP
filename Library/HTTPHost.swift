@@ -21,7 +21,7 @@ protocol HTTPHostProtocol: Hashable
   var authenticate: AuthenticateRequestFunction? { get }
 }
 
-public class HTTPHost: HTTPHostProtocol
+open class HTTPHost: HTTPHostProtocol
 {
   public let validate: ResponseValidationFunction
   public let authenticate: AuthenticateRequestFunction?

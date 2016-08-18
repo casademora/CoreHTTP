@@ -29,7 +29,7 @@ public protocol HTTPResourceProtocol
   var parse: ResourceParseFunction<ResultType> { get }
 }
 
-public class HTTPResource<T>: HTTPResourceProtocol
+open class HTTPResource<T>: HTTPResourceProtocol
 {
   public typealias ResultType = T
   public typealias ErrorType = HTTPResponseError
