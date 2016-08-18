@@ -1,6 +1,6 @@
 //
 //  HTTPResourceRequest.swift
-//  GaugesAPI
+//  CoreHTTP
 //
 //  Created by Saul Mora on 6/25/16.
 //  Copyright © 2016 Magical Panda Software. All rights reserved.
@@ -42,7 +42,7 @@ private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol where R.Err
   return host.authenticate?(request: requestToSend) ?? requestToSend
 }
 
-@discardableResult public func request<R where R: HostedResource, R: HTTPResourceProtocol, R.ErrorType == HTTPResponseError>(resource: R, cachePolicy: NSURLRequest.CachePolicy = defaultCachePolicy, requestTimeout: TimeInterval = defaultTimeout, host: HTTPHost? = nil, completion: (Result<R.ResultType, R.ErrorType>) -> Void) -> URLSessionTask?
+@discardableResult public func request<R where R: HostedResource, R: HTTPResourceProtocol, R.ErrorType == HTTPResponseError>(resource: R, cachePolicy: URLRequest.CachePolicy = defaultCachePolicy, requestTimeout: TimeInterval = defaultTimeout, host: HTTPHost? = nil, completion: (Result<R.ResultType, R.ErrorType>) -> Void) -> URLSessionTask?
 {
   guard let hostToQuery = host ?? hostRegistry.hostFor(resource) else {
     //TODO: throw an error here. No host configured is a programmer error

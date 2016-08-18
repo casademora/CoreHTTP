@@ -1,6 +1,6 @@
 //
 //  HTTPAPIError.swift
-//  GaugesAPI
+//  CoreHTTP
 //
 //  Created by Saul Mora on 6/19/16.
 //  Copyright © 2016 Magical Panda Software. All rights reserved.

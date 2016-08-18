@@ -1,4 +1,4 @@
 github "thoughtbot/Curry"
-github "thoughtbot/Runes" "gf-swift-3"
+github "casademora/Runes" "swift-beta6"
 github "thoughtbot/Argo" "master"
-github "antitypical/Result" "master"
+github "antitypical/Result" "3.0.0-alpha.3"
