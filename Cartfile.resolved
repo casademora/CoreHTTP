@@ -1,5 +1,4 @@
-github "thoughtbot/Curry" "v2.3.3"
+github "casademora/Curry" "8bf20143a65ca3f1d4e209d447340b5fbf4805a3"
 github "antitypical/Result" "3.0.0-alpha.3"
 github "casademora/Runes" "79e44cc84a3dd7b6cfba32e5e64185d535772b9a"
-github "thoughtbot/Runes" "b81919bf0129e2b7f51d7f2c2e08db274f9407af"
-github "thoughtbot/Argo" "b8ce449d5224fd5a893a37f367524accb975bdb3"
+github "casademora/Argo" "7719b2807367197157513ea979437c4b9b0cfe8e"
