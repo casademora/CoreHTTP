@@ -1,4 +1,4 @@
-github "antitypical/Result" "3.0.0-alpha.3"
+github "casademora/Result" "swift-beta6"
 github "casademora/Curry" "swift-beta6"
 github "casademora/Runes" "swift-beta6"
 github "casademora/Argo" "swift-beta6"
