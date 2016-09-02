@@ -21,7 +21,7 @@ public typealias ResourceParseFunction<ResourceDataType> = (Data) -> Result<Reso
 public protocol HTTPResourceProtocol
 {
   associatedtype ResultType
-  associatedtype ErrorType: HTTPAPIError
+  associatedtype ErrorType: HTTPResourceError
   
   var path: String { get }
   var method: HTTPMethod { get }
