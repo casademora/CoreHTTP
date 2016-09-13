@@ -6,18 +6,18 @@
 //  Copyright © 2016 Magical Panda Software. All rights reserved.
 //
 
-public protocol HTTPAPIError: Error
+public protocol HTTPResourceError: Error
 {
 }
 
-public enum HTTPRequestError: HTTPAPIError
+public enum HTTPRequestError: HTTPResourceError
 {
   case Unknown
 }
 
 import Argo
 
-public enum HTTPResponseError: HTTPAPIError
+public enum HTTPResponseError: HTTPResourceError
 {
   case Unknown
   case Cancelled
