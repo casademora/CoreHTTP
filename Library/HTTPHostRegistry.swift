@@ -30,11 +30,15 @@ struct HostRegistry
   }
 }
 
-var hostRegistry = HostRegistry()
+private(set) var hostRegistry = HostRegistry()
 
 public func configure<H: HTTPHost>(host: H)
 {
   hostRegistry.register(host)
 }
 
+public protocol HostedResource
+{
+  var HostType: AnyClass { get }
+}
 

@@ -15,13 +15,12 @@
 		C7C6692F1D223207007ECF77 /* HTTPHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C669261D223207007ECF77 /* HTTPHost.swift */; };
 		C7C669301D223207007ECF77 /* HTTPResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C669271D223207007ECF77 /* HTTPResource.swift */; };
 		C7C669311D223207007ECF77 /* HTTPRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C669281D223207007ECF77 /* HTTPRequest.swift */; };
-		C7C669321D223207007ECF77 /* HTTPAPIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C669291D223207007ECF77 /* HTTPAPIError.swift */; };
+		C7C669321D223207007ECF77 /* HTTPResponseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C669291D223207007ECF77 /* HTTPResponseError.swift */; };
 		C7C669331D223207007ECF77 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C6692A1D223207007ECF77 /* HTTPMethod.swift */; };
 		C7C669341D223207007ECF77 /* HTTPHostRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C6692B1D223207007ECF77 /* HTTPHostRegistry.swift */; };
 		C7C669351D223207007ECF77 /* Decoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C6692C1D223207007ECF77 /* Decoding.swift */; };
 		C7C669361D223207007ECF77 /* DecodingUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C6692D1D223207007ECF77 /* DecodingUtility.swift */; };
 		C7C669371D223207007ECF77 /* Parsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C6692E1D223207007ECF77 /* Parsing.swift */; };
-		C7C6693B1D223278007ECF77 /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = C7C6693A1D223278007ECF77 /* Cartfile */; };
 		C7C6693F1D223374007ECF77 /* Argo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7C6693C1D223374007ECF77 /* Argo.framework */; };
 		C7C669401D223374007ECF77 /* Curry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7C6693D1D223374007ECF77 /* Curry.framework */; };
 		C7C669411D223374007ECF77 /* Runes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7C6693E1D223374007ECF77 /* Runes.framework */; };
@@ -42,13 +41,12 @@
 		C7C669261D223207007ECF77 /* HTTPHost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPHost.swift; sourceTree = "<group>"; };
 		C7C669271D223207007ECF77 /* HTTPResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPResource.swift; sourceTree = "<group>"; };
 		C7C669281D223207007ECF77 /* HTTPRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPRequest.swift; sourceTree = "<group>"; };
-		C7C669291D223207007ECF77 /* HTTPAPIError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPAPIError.swift; sourceTree = "<group>"; };
+		C7C669291D223207007ECF77 /* HTTPResponseError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPResponseError.swift; sourceTree = "<group>"; };
 		C7C6692A1D223207007ECF77 /* HTTPMethod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		C7C6692B1D223207007ECF77 /* HTTPHostRegistry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPHostRegistry.swift; sourceTree = "<group>"; };
 		C7C6692C1D223207007ECF77 /* Decoding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Decoding.swift; sourceTree = "<group>"; };
 		C7C6692D1D223207007ECF77 /* DecodingUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecodingUtility.swift; sourceTree = "<group>"; };
 		C7C6692E1D223207007ECF77 /* Parsing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Parsing.swift; sourceTree = "<group>"; };
-		C7C6693A1D223278007ECF77 /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = "<group>"; };
 		C7C6693C1D223374007ECF77 /* Argo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Argo.framework; path = Carthage/Build/iOS/Argo.framework; sourceTree = SOURCE_ROOT; };
 		C7C6693D1D223374007ECF77 /* Curry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Curry.framework; path = Carthage/Build/iOS/Curry.framework; sourceTree = SOURCE_ROOT; };
 		C7C6693E1D223374007ECF77 /* Runes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Runes.framework; path = Carthage/Build/iOS/Runes.framework; sourceTree = SOURCE_ROOT; };
@@ -75,7 +73,6 @@
 		C7C6690D1D223181007ECF77 = {
 			isa = PBXGroup;
 			children = (
-				C7C6693A1D223278007ECF77 /* Cartfile */,
 				C7C669221D2231D4007ECF77 /* Library */,
 				C7C669391D22325E007ECF77 /* Resources */,
 				C7C669181D223181007ECF77 /* Products */,
@@ -98,7 +95,7 @@
 				C7C669271D223207007ECF77 /* HTTPResource.swift */,
 				C7C669281D223207007ECF77 /* HTTPRequest.swift */,
 				C759F9211D2263D60081C915 /* HTTPResponse.swift */,
-				C7C669291D223207007ECF77 /* HTTPAPIError.swift */,
+				C7C669291D223207007ECF77 /* HTTPResponseError.swift */,
 				C7C6692A1D223207007ECF77 /* HTTPMethod.swift */,
 				C759F9231D226C150081C915 /* HTTPStatusCodes.swift */,
 				C7C6692B1D223207007ECF77 /* HTTPHostRegistry.swift */,
@@ -207,7 +204,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C7C6693B1D223278007ECF77 /* Cartfile in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -224,7 +220,7 @@
 				C71A7F791D87A4BD00F2C879 /* Logging.swift in Sources */,
 				C759F9221D2263D60081C915 /* HTTPResponse.swift in Sources */,
 				C7C669361D223207007ECF77 /* DecodingUtility.swift in Sources */,
-				C7C669321D223207007ECF77 /* HTTPAPIError.swift in Sources */,
+				C7C669321D223207007ECF77 /* HTTPResponseError.swift in Sources */,
 				C7C669301D223207007ECF77 /* HTTPResource.swift in Sources */,
 				C7C669331D223207007ECF77 /* HTTPMethod.swift in Sources */,
 				C7C669341D223207007ECF77 /* HTTPHostRegistry.swift in Sources */,

@@ -11,11 +11,6 @@ import Runes
 import Result
 import Foundation
 
-public protocol HostedResource
-{
-  var HostType: AnyClass { get }
-}
-
 public typealias ResourceParseFunction<ResourceType> = (Data) -> Result<ResourceType, HTTPResponseError>
 
 public protocol HTTPResourceProtocol

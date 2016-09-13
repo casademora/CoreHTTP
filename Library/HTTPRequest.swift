@@ -14,9 +14,6 @@ let defaultTimeout: TimeInterval = 30.seconds
 
 private func process(request: URLRequest) -> URLRequest
 {
-  var request = request
-  request.setValue(userAgentString(), forHTTPHeaderField: "User-Agent")
-  
   //set ContentType
   //set Accept
   //set Language
@@ -58,15 +55,7 @@ private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol>(resource: 
   let completionHandler = completionHandlerForRequest(resource: resource, validate: hostToQuery.validate, completion: completion)
   let task = hostToQuery.session.dataTask(with: request, completionHandler: completionHandler)
   task.resume()
-  log(message: "Sending Request: \(request.url)")
-  return task
-}
-
-private func userAgentString() -> String
-{
-  let bundle = Bundle.main
-  let device = UIDevice.current
-  let screen = UIScreen.main
   
-  return "\(bundle.executableName))/\(bundle.bundleVersion) (\(device.model); iOS \(device.systemVersion); Scale/\(screen.scale)"
+  log(level: .Debug, message: "Sending Request: \(request.url)")
+  return task
 }

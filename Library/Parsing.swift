@@ -45,8 +45,8 @@ func deserializeJSON(data: Data) -> Result<AnyObject, HTTPResponseError>
   }
   catch
   {
-    log(message: "Unable to deserialize JSON: \(error)")
-    return Result(error: .DeserializationFailure(message: error.localizedDescription))
+    log(level: .Error, message: "Unable to deserialize JSON: \(error)")
+    return Result(error: .deserializationFailure(message: error.localizedDescription))
   }
 }
 
@@ -58,14 +58,16 @@ func serializeJSON(object: AnyObject) -> Result<Data, HTTPResponseError>
   }
   catch
   {
-    log(message: "Unable to serialize JSON: \(error)")
-    return Result(error: .DeserializationFailure(message: error.localizedDescription))
+    log(level: .Error, message: "Unable to serialize JSON: \(error)")
+    return Result(error: .deserializationFailure(message: error.localizedDescription))
   }
 }
 
+private let unableToReadSourceMessage = "<<Unable to read source>>"
+
 func sourceStringFrom(data: Data) -> String
 {
-  let source = String(data: data, encoding: String.Encoding.utf8) ?? "<<Unable to read source>>"
+  let source = String(data: data, encoding: String.Encoding.utf8) ?? unableToReadSourceMessage
   return source
 }
 
@@ -75,5 +77,5 @@ func sourceStringFrom(object: AnyObject) -> String
   {
     return source.description
   }
-  return "<<Unable to read source>>"
+  return unableToReadSourceMessage
 }

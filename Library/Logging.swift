@@ -17,7 +17,23 @@ enum LogLevel: Int
   case Fatal
 }
 
+protocol Logger
+{
+  func log(level: LogLevel, message: String)
+}
+
+extension Logger
+{
+  func log(level: LogLevel = .Debug, message: String)
+  {
+    print(message)
+  }
+}
+
+var currentLogLevel: LogLevel = .Debug
+var currentLogger: Logger?
+
 func log(level: LogLevel = .Debug, message: String)
 {
-  print(message)
+  currentLogger?.log(level: level, message: message)
 }
