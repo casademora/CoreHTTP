@@ -55,15 +55,3 @@ public func stringFrom(format: String) -> (Date) -> String
     formatter.string(from: date)
   }
 }
-
-/// Utilities
-
-func convertToQueryString(dictionary: [String: String]) -> String?
-{
-  guard !dictionary.isEmpty else {  return nil }
-  
-  return dictionary
-    .map { "\($0)=\($1)" }
-    .joined(separator: "&")
-}
-

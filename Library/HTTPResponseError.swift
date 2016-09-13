@@ -10,21 +10,20 @@ public protocol HTTPResourceError: Error
 {
 }
 
-public enum HTTPRequestError: HTTPResourceError
-{
-  case Unknown
-}
-
 public enum HTTPResponseError: HTTPResourceError
 {
   case unknown
   case cancelled
   case noResponse
-  case noResponseData
+
   case invalidResponseType
+  case hostNotSpecified
+  case hostBaseURLInvalid
+  case unableToBuildRequest
+  
   case unexpectedHTTPStatus(statusCode: HTTPStatusCode, description: String)
   
-  case decodingFailure(description: String, source: String) //TODO: show json parse error details
+  case decodingFailure(description: String, source: String)
   case deserializationFailure(message: String)
   
   static func failure(_ response: HTTPURLResponse) -> HTTPResponseError
