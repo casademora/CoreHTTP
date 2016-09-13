@@ -73,8 +73,8 @@ private func defaultValidation(data: Data?) -> (HTTPURLResponse) -> Result<Data,
 {
   return { response in
      response.isSuccess ?
-      Result(data, failWith: .failure(response)) :
-      Result(error: .failure(response))
+      Result(data, failWith: .responseFailure(response)) :
+      Result(error: .responseFailure(response))
   }
 }
 

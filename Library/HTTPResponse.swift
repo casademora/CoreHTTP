@@ -17,7 +17,7 @@ func validateResponse(_ error: Error?) -> (HTTPURLResponse?) -> Result<HTTPURLRe
   
     func transform(error: Error) -> Result<HTTPURLResponse, HTTPResponseError>
     {
-      return Result(error: error._code == NSURLErrorCancelled ? .cancelled : .failure(httpResponse))
+      return Result(error: error._code == NSURLErrorCancelled ? .cancelled : .responseFailure(httpResponse))
     }
     
     return error.flatMap(transform) ?? Result(httpResponse)

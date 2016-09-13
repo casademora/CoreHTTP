@@ -26,7 +26,7 @@ public enum HTTPResponseError: HTTPResourceError
   case decodingFailure(description: String, source: String)
   case deserializationFailure(message: String)
   
-  static func failure(_ response: HTTPURLResponse) -> HTTPResponseError
+  static func responseFailure(_ response: HTTPURLResponse) -> HTTPResponseError
   {
     let statusCode = response.httpStatusCode
     return .unexpectedHTTPStatus(statusCode: statusCode, description: statusCode.localizedDescription)
