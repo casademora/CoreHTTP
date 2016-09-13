@@ -40,10 +40,10 @@ public func parse<T: Decodable>(rootKey: String) -> (Data) -> Result<[T], HTTPRe
 func deserializeJSON(data: Data) -> Result<AnyObject, HTTPResponseError>
 {
   do {
-    let result = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions(rawValue: 0))
+    let result = try JSONSerialization.jsonObject(with: data, options: .init(rawValue: 0))
     return Result(result as AnyObject)
   }
-  catch let error as NSError
+  catch
   {
     log(message: "Unable to deserialize JSON: \(error)")
     return Result(error: .DeserializationFailure(message: error.localizedDescription))
@@ -53,10 +53,10 @@ func deserializeJSON(data: Data) -> Result<AnyObject, HTTPResponseError>
 func serializeJSON(object: AnyObject) -> Result<Data, HTTPResponseError>
 {
   do {
-    let result = try JSONSerialization.data(withJSONObject: object, options: JSONSerialization.WritingOptions(rawValue: 0))
+    let result = try JSONSerialization.data(withJSONObject: object, options: .init(rawValue: 0))
     return Result(result)
   }
-  catch let error as NSError
+  catch
   {
     log(message: "Unable to serialize JSON: \(error)")
     return Result(error: .DeserializationFailure(message: error.localizedDescription))

@@ -28,7 +28,7 @@ open class HTTPHost: HTTPHostProtocol
   private let configuration: URLSessionConfiguration
   public let baseURLString: String
   
-  public init(baseURLString: String, configuration: URLSessionConfiguration, validate: ResponseValidationFunction = defaultValidation, authenticate: AuthenticateRequestFunction? = nil)
+  public init(baseURLString: String, configuration: URLSessionConfiguration, validate: @escaping ResponseValidationFunction = defaultValidation, authenticate: AuthenticateRequestFunction? = nil)
   {
     self.baseURLString = baseURLString
     self.configuration = configuration

@@ -16,14 +16,14 @@ func decode<T: Decodable>(rootKey: String) -> (AnyObject) -> Result<T, HTTPRespo
     let decodable = objectData as! [String : AnyObject]
     let result: Decoded<T> = decode(decodable, rootKey: rootKey)
     
-    return (transform <^> objectData <*> result) ?? Result(error: .Unknown)
+    return (transform <^> objectData <*> result) ?? Result(error: .DeserializationFailure(message: "Object Data \(objectData), rootKey: \(rootKey)"))
   }
 }
 
 func decode<T: Decodable>(objectData: AnyObject) -> Result<T, HTTPResponseError> where T == T.DecodedType
 {
   let result: Decoded<T> = decode(objectData)
-  return (transform <^> objectData <*> result) ?? Result(error: .Unknown)
+  return (transform <^> objectData <*> result) ?? Result(error: .DeserializationFailure(message: "Object Data \(objectData)"))
 }
 
 func decode<T: Decodable>(rootKey: String) -> (AnyObject) -> Result<[T], HTTPResponseError> where T == T.DecodedType
@@ -32,14 +32,14 @@ func decode<T: Decodable>(rootKey: String) -> (AnyObject) -> Result<[T], HTTPRes
     let decodable = objectData as! [String: AnyObject]
     let result: Decoded<[T]> = decode(decodable, rootKey: rootKey)
     
-    return (transform <^> objectData <*> result) ?? Result(error: .Unknown)
+    return (transform <^> objectData <*> result) ?? Result(error: .DeserializationFailure(message: "Object Data \(objectData), rootKey: \(rootKey)"))
   }
 }
 
 func decode<T: Decodable>(objectData: AnyObject) -> Result<[T], HTTPResponseError> where T == T.DecodedType
 {
   let result: Decoded<[T]> = decode(objectData)
-  return (transform <^> objectData <*> result) ?? Result(error: .Unknown)
+  return (transform <^> objectData <*> result) ?? Result(error: .DeserializationFailure(message: "Object Data: \(objectData)"))
 }
 
 private func transform<T: Decodable>(objectData: AnyObject) -> (Decoded<T>) -> Result<T, HTTPResponseError> where T == T.DecodedType

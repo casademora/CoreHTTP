@@ -20,20 +20,19 @@ func validateResponse(_ error: Error?) -> (HTTPURLResponse?) -> Result<HTTPURLRe
       return Result(error: error._code == NSURLErrorCancelled ? .Cancelled : .failure(httpResponse))
     }
     
-    let returnValue = error.flatMap(transform)
-    return returnValue ?? Result(httpResponse)
+    return error.flatMap(transform) ?? Result(httpResponse)
   }
 }
 
-func completionHandlerForRequest<R: HTTPResourceProtocol>(resource: R, validate: ResponseValidationFunction, completion: @escaping (Result<R.ResultType, R.ErrorType>) -> Void) -> (Data?, URLResponse?, Error?) -> Void
+func completionHandlerForRequest<R: HTTPResourceProtocol>(resource: R, validate: @escaping ResponseValidationFunction, completion: @escaping (Result<R.ResourceType, R.ErrorType>) -> Void) -> (Data?, URLResponse?, Error?) -> Void
   where R.ErrorType == HTTPResponseError
 {
   return { (data, response, error) in
-    let lastValue = Result(response as? HTTPURLResponse, failWith: .InvalidResponseType)
+    let requestedValue = Result(response as? HTTPURLResponse, failWith: .InvalidResponseType)
       >>- validateResponse(error)
       >>- validate(data)
       >>- resource.parse
     
-    return completion(lastValue)
+    completion(requestedValue)
   }
 }

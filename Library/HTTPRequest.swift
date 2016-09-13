@@ -43,7 +43,7 @@ private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol>(resource: 
   return host.authenticate?(requestToSend) ?? requestToSend
 }
 
-@discardableResult public func request<R>(resource: R, cachePolicy: URLRequest.CachePolicy = defaultCachePolicy, requestTimeout: TimeInterval = defaultTimeout, host: HTTPHost? = nil, completion: @escaping (Result<R.ResultType, R.ErrorType>) -> Void) -> URLSessionTask?
+@discardableResult public func request<R>(resource: R, cachePolicy: URLRequest.CachePolicy = defaultCachePolicy, requestTimeout: TimeInterval = defaultTimeout, host: HTTPHost? = nil, completion: @escaping (Result<R.ResourceType, R.ErrorType>) -> Void) -> URLSessionTask?
   where R: HostedResource, R: HTTPResourceProtocol, R.ErrorType == HTTPResponseError
 {
   guard let hostToQuery = host ?? hostRegistry.hostFor(resource) else {
@@ -51,7 +51,7 @@ private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol>(resource: 
     return nil
   }
   guard let request = requestFor(resource: resource, host: hostToQuery, cachePolicy: cachePolicy, requestTimeout: requestTimeout) else {
-    //TOD): throw an error here
+    //TODO): throw an error here
     return nil
   }
   

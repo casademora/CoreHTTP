@@ -16,17 +16,17 @@ public protocol HostedResource
   var HostType: AnyClass { get }
 }
 
-public typealias ResourceParseFunction<ResourceDataType> = (Data) -> Result<ResourceDataType, HTTPResponseError>
+public typealias ResourceParseFunction<ResourceType> = (Data) -> Result<ResourceType, HTTPResponseError>
 
 public protocol HTTPResourceProtocol
 {
-  associatedtype ResultType
+  associatedtype ResourceType
   associatedtype ErrorType: HTTPAPIError
   
   var path: String { get }
   var method: HTTPMethod { get }
   var queryParameters: [String: String] { get }
-  var parse: ResourceParseFunction<ResultType> { get }
+  var parse: ResourceParseFunction<ResourceType> { get }
 }
 
 open class HTTPResource<T>: HTTPResourceProtocol
@@ -39,7 +39,7 @@ open class HTTPResource<T>: HTTPResourceProtocol
   public let queryParameters: [String : String]
   public let parse: ResourceParseFunction<ResultType>
   
-  public init(path: String, method: HTTPMethod = QueriableHTTPMethod.GET, queryParameters: [String: String] = [:], parse: ResourceParseFunction<T>)
+  public init(path: String, method: HTTPMethod = QueriableHTTPMethod.GET, queryParameters: [String: String] = [:], parse: @escaping ResourceParseFunction<T>)
   {
     self.path = path
     self.method = method

@@ -1,9 +1,9 @@
 //
-//  NSBundle+Extensions.swift
-//  LeaderboardModule
+//  NSBundle+Additions.swift
 //
-//  Created by Saul Mora on 5/31/16.
-//  Copyright © 2016 Liulishuo. All rights reserved.
+//
+//  Created by Saul Mora on 6/26/16.
+//  Copyright © 2016 Magical Panda Software. All rights reserved.
 //
 
 import Foundation
