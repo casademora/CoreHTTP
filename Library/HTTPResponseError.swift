@@ -19,7 +19,7 @@ public enum HTTPResponseError: HTTPResourceError
   case invalidResponseType
   case hostNotSpecified
   case hostBaseURLInvalid
-  case unableToBuildRequest
+  case unableToBuildRequest(path: String, queryParameters: [String: String])
   
   case unexpectedHTTPStatus(statusCode: HTTPStatusCode, description: String)
   

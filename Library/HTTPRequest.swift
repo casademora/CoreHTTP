@@ -29,7 +29,7 @@ private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol>(resource: 
   components.query = convertToQueryString(dictionary: resource.queryParameters)
   
   guard let requestURL = components.url else {
-    return Result(error: .unableToBuildRequest)
+    return Result(error: .unableToBuildRequest(path: resource.path, queryParameters: resource.queryParameters))
   }
   
   var originalRequest = URLRequest(url: requestURL, cachePolicy: cachePolicy, timeoutInterval: requestTimeout)
