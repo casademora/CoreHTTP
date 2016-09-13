@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum LogLevel: Int
+public enum LogLevel: Int
 {
   case Debug
   case Info
@@ -17,7 +17,7 @@ enum LogLevel: Int
   case Fatal
 }
 
-protocol Logger
+public protocol Logger
 {
   func log(level: LogLevel, message: String)
 }
@@ -30,8 +30,8 @@ extension Logger
   }
 }
 
-var currentLogLevel: LogLevel = .Debug
-var currentLogger: Logger?
+public var currentLogLevel: LogLevel = .Debug
+public var currentLogger: Logger?
 
 func log(level: LogLevel = .Debug, message: String)
 {
