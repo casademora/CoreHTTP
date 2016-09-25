@@ -26,7 +26,7 @@ private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol>(resource: 
   guard var components = URLComponents(string: host.baseURLString) else { return Result(error: .hostBaseURLInvalid) }
   
   components.path = "/" + resource.path
-  components.query = convertToQueryString(dictionary: resource.queryParameters)
+  components.queryItems = convertToQueryItems(source: resource.queryParameters)
   
   guard let requestURL = components.url else {
     return Result(error: .unableToBuildRequest(path: resource.path, queryParameters: resource.queryParameters))
@@ -63,12 +63,9 @@ private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol>(resource: 
 
 /// Utilities
 
-private func convertToQueryString(dictionary: [String: String]) -> String?
+private func convertToQueryItems(source: [String: String]) -> [URLQueryItem]
 {
-  guard !dictionary.isEmpty else {  return nil }
+  guard !source.isEmpty else { return [] }
   
-  return dictionary
-    .map { "\($0)=\($1)" }
-    .joined(separator: "&")
+  return source.flatMap { URLQueryItem(name: $0, value: $1) }
 }
-
