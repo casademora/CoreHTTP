@@ -8,10 +8,9 @@
 
 import Result
 
-func validateResponse(_ error: Error?) -> (HTTPURLResponse?) -> Result<HTTPURLResponse, HTTPResponseError>
+func validateResponse(_ error: Error?) -> (HTTPURLResponse) -> Result<HTTPURLResponse, HTTPResponseError>
 {
-  return { response in
-    guard let httpResponse = response else { return Result(response, failWith: .noResponse) }
+  return { httpResponse in
     
     log(level: .Debug, message: "Received Response: \(httpResponse.statusCode) - \(httpResponse.url) - \(httpResponse.allHeaderFields)")
   
@@ -28,13 +27,14 @@ func completionHandlerForRequest<R: HTTPResourceProtocol>
   (
     resource: R,
     validate: @escaping ResponseValidationFunction,
-    completion: @escaping (Result<R.ResultType, R.ErrorType>) -> Void
+    completion: @escaping (Result<R.ResourceType, R.ErrorType>) -> Void
   )
     -> (Data?, URLResponse?, Error?) -> Void
     where R.ErrorType == HTTPResponseError
 {
   return { (data, response, error) in
-    let responseValue = Result(response as? HTTPURLResponse, failWith: .InvalidResponseType)
+  
+    let responseValue = Result(response as? HTTPURLResponse, failWith: .invalidResponseType)
       >>- validateResponse(error)
       >>- validate(data)
       >>- resource.parse

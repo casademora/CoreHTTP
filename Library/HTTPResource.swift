@@ -11,7 +11,8 @@ import Runes
 import Result
 import Foundation
 
-public typealias ResourceParseFunction<ResourceType> = (Data) -> Result<ResourceType, HTTPResponseError>
+public typealias ResourceParseResult<ResourceType> = Result<ResourceType, HTTPResponseError>
+//public typealias ResourceParseFunction<ResourceType> = (Data) -> ResourceParseResult<ResourceType>
 
 public protocol HTTPResourceProtocol
 {
@@ -21,7 +22,7 @@ public protocol HTTPResourceProtocol
   var path: String { get }
   var method: HTTPMethod { get }
   var queryParameters: [String: String] { get }
-  var parse: ResourceParseFunction<ResourceType> { get }
+  var parse: (Data) -> ResourceParseResult<ResourceType> { get }
 }
 
 open class HTTPResource<T>: HTTPResourceProtocol
@@ -32,9 +33,9 @@ open class HTTPResource<T>: HTTPResourceProtocol
   public let path: String
   public let method: HTTPMethod
   public let queryParameters: [String : String]
-  public let parse: ResourceParseFunction<ResultType>
+  public let parse: (Data) -> ResourceParseResult<ResultType>
   
-  public init(path: String, method: HTTPMethod = QueriableHTTPMethod.GET, queryParameters: [String: String] = [:], parse: @escaping ResourceParseFunction<T>)
+  public init(path: String, method: HTTPMethod = QueriableHTTPMethod.GET, queryParameters: [String: String] = [:], parse: @escaping (Data) -> ResourceParseResult<T>)
   {
     self.path = path
     self.method = method
