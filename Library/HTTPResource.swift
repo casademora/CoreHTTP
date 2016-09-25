@@ -39,7 +39,7 @@ public class HTTPResource<T>: HTTPResourceProtocol
   public let queryParameters: [String : String]
   public let parse: ResourceParseFunction<ResultType>
   
-  public init(path: String, method: HTTPMethod = QueriableHTTPMethod.GET, queryParameters: [String: String] = [:], parse: ResourceParseFunction<T>)
+  public init(path: String, method: HTTPMethod = QueriableHTTPMethod.GET, queryParameters: [String: String] = [:], parse: @escaping ResourceParseFunction<T>)
   {
     self.path = path
     self.method = method

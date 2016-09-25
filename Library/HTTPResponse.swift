@@ -25,15 +25,21 @@ func validateResponse(_ error: Error?) -> (HTTPURLResponse?) -> Result<HTTPURLRe
   }
 }
 
-func completionHandlerForRequest<R: HTTPResourceProtocol>(resource: R, validate: ResponseValidationFunction, completion: @escaping (Result<R.ResultType, R.ErrorType>) -> Void) -> (Data?, URLResponse?, Error?) -> Void
-  where R.ErrorType == HTTPResponseError
+func completionHandlerForRequest<R: HTTPResourceProtocol>
+  (
+    resource: R,
+    validate: @escaping ResponseValidationFunction,
+    completion: @escaping (Result<R.ResultType, R.ErrorType>) -> Void
+  )
+    -> (Data?, URLResponse?, Error?) -> Void
+    where R.ErrorType == HTTPResponseError
 {
   return { (data, response, error) in
-    let lastValue = Result(response as? HTTPURLResponse, failWith: .InvalidResponseType)
+    let responseValue = Result(response as? HTTPURLResponse, failWith: .InvalidResponseType)
       >>- validateResponse(error)
       >>- validate(data)
       >>- resource.parse
     
-    return completion(lastValue)
+    completion(responseValue)
   }
 }
