@@ -30,49 +30,15 @@ struct HostRegistry
   }
 }
 
-var hostRegistry = HostRegistry()
+private(set) var hostRegistry = HostRegistry()
 
 public func configure<H: HTTPHost>(host: H)
 {
   hostRegistry.register(host)
 }
 
-
-/// Utilities
-
-func convertToQueryString(dictionary: [String: String]) -> String?
+public protocol HostedResource
 {
-  guard !dictionary.isEmpty else {  return nil }
-  
-  return dictionary
-    .map { "\($0)=\($1)" }
-   .joined(separator: "&")
+  var HostType: AnyClass { get }
 }
 
-func log(message: String)
-{
-  print(message)
-}
-
-extension Int
-{
-  var seconds: TimeInterval
-  {
-    return TimeInterval(self)
-  }
-  
-  var minutes: TimeInterval
-  {
-    return TimeInterval(self * 60)
-  }
-  
-  var hours: TimeInterval
-  {
-    return minutes * 60
-  }
-  
-  var days: TimeInterval
-  {
-    return hours * 24
-  }
-}

@@ -28,10 +28,12 @@ public func dateFrom(_ format: String) -> (String) -> Decoded<Date>
   let formatter = DateFormatter()
   formatter.dateFormat = format
   return { dateToFormat in
-    if let date = formatter.date(from: dateToFormat) {
+    if let date = formatter.date(from: dateToFormat)
+    {
       return .success(date)
     }
-    else{
+    else
+    {
       return .failure(.typeMismatch(expected: "Date", actual: dateToFormat))
     }
   }

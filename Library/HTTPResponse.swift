@@ -11,17 +11,16 @@ import Result
 func validateResponse(_ error: Error?) -> (HTTPURLResponse?) -> Result<HTTPURLResponse, HTTPResponseError>
 {
   return { response in
-    guard let httpResponse = response else { return Result(response, failWith: .NoResponse) }
+    guard let httpResponse = response else { return Result(response, failWith: .noResponse) }
     
-    log(message: "Received Response: \(httpResponse.statusCode) - \(httpResponse.url) - \(httpResponse.allHeaderFields)")
+    log(level: .Debug, message: "Received Response: \(httpResponse.statusCode) - \(httpResponse.url) - \(httpResponse.allHeaderFields)")
   
     func transform(error: Error) -> Result<HTTPURLResponse, HTTPResponseError>
     {
-      return Result(error: error._code == NSURLErrorCancelled ? .Cancelled : .failure(httpResponse))
+      return Result(error: error._code == NSURLErrorCancelled ? .cancelled : .responseFailure(httpResponse))
     }
     
-    let returnValue = error.flatMap(transform)
-    return returnValue ?? Result(httpResponse)
+    return error.flatMap(transform) ?? Result(httpResponse)
   }
 }
 

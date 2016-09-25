@@ -21,7 +21,7 @@ protocol HTTPHostProtocol: Hashable
   var authenticate: AuthenticateRequestFunction? { get }
 }
 
-public class HTTPHost: HTTPHostProtocol
+open class HTTPHost: HTTPHostProtocol
 {
   public let validate: ResponseValidationFunction
   public let authenticate: AuthenticateRequestFunction?
@@ -36,8 +36,17 @@ public class HTTPHost: HTTPHostProtocol
     self.authenticate = authenticate
   }
   
+  open func applyAdditionalConfiguration(_ configuration: URLSessionConfiguration)
+  {
+    configuration.httpAdditionalHeaders =
+      [
+        "User-Agent": buildUserAgent()
+      ]
+  }
+  
   public lazy var session: URLSession = {
-      return URLSession(configuration: self.configuration, delegate: nil, delegateQueue: nil)
+    self.applyAdditionalConfiguration(self.configuration)
+    return URLSession(configuration: self.configuration, delegate: nil, delegateQueue: nil)
   }()
 
 }
@@ -63,8 +72,17 @@ public func ==<H: HTTPHost>(lhs: H, rhs: H) -> Bool
 private func defaultValidation(data: Data?) -> (HTTPURLResponse) -> Result<Data, HTTPResponseError>
 {
   return { response in
-    return response.isSuccess ?
-      Result(data, failWith: .failure(response)) :
-      Result(error: .failure(response))
+     response.isSuccess ?
+      Result(data, failWith: .responseFailure(response)) :
+      Result(error: .responseFailure(response))
   }
+}
+
+private func buildUserAgent() -> String
+{
+  let bundle = Bundle.main
+  let device = UIDevice.current
+  let screen = UIScreen.main
+  
+  return "\(bundle.executableName))/\(bundle.bundleVersion) (\(device.model); \(device.systemName) \(device.systemVersion); Scale/\(screen.scale))"
 }
