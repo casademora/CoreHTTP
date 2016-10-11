@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C7C669161D223181007ECF77"
-               BuildableName = "CoreHTTP.framework"
-               BlueprintName = "CoreHTTP"
+               BuildableName = "CoreHTTP-iOS.framework"
+               BlueprintName = "CoreHTTP-iOS"
                ReferencedContainer = "container:CoreHTTP.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,8 +46,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C7C669161D223181007ECF77"
-            BuildableName = "CoreHTTP.framework"
-            BlueprintName = "CoreHTTP"
+            BuildableName = "CoreHTTP-iOS.framework"
+            BlueprintName = "CoreHTTP-iOS"
             ReferencedContainer = "container:CoreHTTP.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -64,8 +64,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C7C669161D223181007ECF77"
-            BuildableName = "CoreHTTP.framework"
-            BlueprintName = "CoreHTTP"
+            BuildableName = "CoreHTTP-iOS.framework"
+            BlueprintName = "CoreHTTP-iOS"
             ReferencedContainer = "container:CoreHTTP.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

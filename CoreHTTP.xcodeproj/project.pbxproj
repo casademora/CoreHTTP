@@ -146,9 +146,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		C7C669161D223181007ECF77 /* CoreHTTP */ = {
+		C7C669161D223181007ECF77 /* CoreHTTP-iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C7C6691F1D223181007ECF77 /* Build configuration list for PBXNativeTarget "CoreHTTP" */;
+			buildConfigurationList = C7C6691F1D223181007ECF77 /* Build configuration list for PBXNativeTarget "CoreHTTP-iOS" */;
 			buildPhases = (
 				C7C669121D223181007ECF77 /* Sources */,
 				C7C669131D223181007ECF77 /* Frameworks */,
@@ -159,7 +159,7 @@
 			);
 			dependencies = (
 			);
-			name = CoreHTTP;
+			name = "CoreHTTP-iOS";
 			productName = CoreHTTP;
 			productReference = C7C669171D223181007ECF77 /* CoreHTTP.framework */;
 			productType = "com.apple.product-type.framework";
@@ -194,7 +194,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C7C669161D223181007ECF77 /* CoreHTTP */,
+				C7C669161D223181007ECF77 /* CoreHTTP-iOS */,
 			);
 		};
 /* End PBXProject section */
@@ -346,7 +346,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.magicalpanda.CoreHTTP;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = CoreHTTP;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -369,7 +369,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.magicalpanda.CoreHTTP;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = CoreHTTP;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 3.0;
 			};
@@ -387,7 +387,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C7C6691F1D223181007ECF77 /* Build configuration list for PBXNativeTarget "CoreHTTP" */ = {
+		C7C6691F1D223181007ECF77 /* Build configuration list for PBXNativeTarget "CoreHTTP-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C7C669201D223181007ECF77 /* Debug */,
