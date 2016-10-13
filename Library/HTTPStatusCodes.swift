@@ -8,7 +8,7 @@
 
 //https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
 
-public protocol HTTPStatusCodeProtocol
+public protocol HTTPStatusCodeProtocol: ExpressibleByIntegerLiteral
 {
   var rawValue: Int { get }
   var code: Int { get }
@@ -64,6 +64,11 @@ extension HTTPURLResponse
 
 public enum HTTPStatusCode: Int, HTTPStatusCodeProtocol
 {
+  public init(integerLiteral value: Int)
+  {
+    self = HTTPStatusCode.statusFor(code: value)
+  }
+  
   static func statusFor(code: Int) -> HTTPStatusCode
   {
     return HTTPStatusCode(rawValue: code) ?? .Unknown
@@ -76,7 +81,7 @@ public enum HTTPStatusCode: Int, HTTPStatusCodeProtocol
   case SwitchingProtocols = 101
   case Processing = 102
   
-  private static let informationalStatusCodes: [HTTPStatusCode] = [.Continue, .SwitchingProtocols, .Processing]
+  fileprivate static let informationalStatusCodes: [HTTPStatusCode] = [.Continue, .SwitchingProtocols, .Processing]
   public var isInformational: Bool
   {
     return HTTPStatusCode.informationalStatusCodes.contains(self)
@@ -94,7 +99,7 @@ public enum HTTPStatusCode: Int, HTTPStatusCodeProtocol
   case AlreadyReported = 208
   case IMUsed = 226
   
-  private static let successStatusCodes: [HTTPStatusCode] = [.OK, .Created, .Accepted, .NonAuthoratativeInformation, .NoContent, .ResetContent, .PartialContent, .MultiStatus, .AlreadyReported, .IMUsed]
+  fileprivate static let successStatusCodes: [HTTPStatusCode] = [.OK, .Created, .Accepted, .NonAuthoratativeInformation, .NoContent, .ResetContent, .PartialContent, .MultiStatus, .AlreadyReported, .IMUsed]
   public var isSuccess: Bool
   {
     return HTTPStatusCode.successStatusCodes.contains(self)
@@ -111,7 +116,7 @@ public enum HTTPStatusCode: Int, HTTPStatusCodeProtocol
   case TemporaryRedirect = 307
   case PermanentRedirect = 308
   
-  private static let redirectionStatusCodes: [HTTPStatusCode] = [.MultipleChoices, .MovedPermanently, .Found, .SeeOther, .NotModified, .UseProxy, .SwitchProxy, .TemporaryRedirect, .PermanentRedirect]
+  fileprivate static let redirectionStatusCodes: [HTTPStatusCode] = [.MultipleChoices, .MovedPermanently, .Found, .SeeOther, .NotModified, .UseProxy, .SwitchProxy, .TemporaryRedirect, .PermanentRedirect]
   public var isRedirection: Bool
   {
     return HTTPStatusCode.redirectionStatusCodes.contains(self)
@@ -166,7 +171,7 @@ public enum HTTPStatusCode: Int, HTTPStatusCodeProtocol
   case NotExtended = 510
   case NetworkAuthenticationRequired = 511
   
-  private static let serverErrorStatusCodes: [HTTPStatusCode] = [.InternalServerError, .NotImplemented, .BadGateway, .ServiceUnavailable, .GatewayTimeout, .HTTPVersionNotSupported, .VariantAlsoNegatiates, .InsufficientStorage, .LoopDetected, .NotExtended, .NetworkAuthenticationRequired]
+  fileprivate static let serverErrorStatusCodes: [HTTPStatusCode] = [.InternalServerError, .NotImplemented, .BadGateway, .ServiceUnavailable, .GatewayTimeout, .HTTPVersionNotSupported, .VariantAlsoNegatiates, .InsufficientStorage, .LoopDetected, .NotExtended, .NetworkAuthenticationRequired]
   public var isServerError: Bool
   {
     return HTTPStatusCode.serverErrorStatusCodes.contains(self)
@@ -175,6 +180,12 @@ public enum HTTPStatusCode: Int, HTTPStatusCodeProtocol
 
 enum UnofficialStatusCode: Int, HTTPStatusCodeProtocol
 {
+  init(integerLiteral value: Int)
+  {
+    self = UnofficialStatusCode(rawValue: value) ?? .Unknown
+  }
+  
+  case Unknown = 0
   case Checkpoint = 103
   case EnhaceYourCalm = 420
   case BlockedByWindowsParentalControls = 450
@@ -197,6 +208,12 @@ extension HTTPStatusCode
 
 enum InternetInformationServicesStatusCode: Int, HTTPStatusCodeProtocol
 {
+  init(integerLiteral value: Int)
+  {
+    self = InternetInformationServicesStatusCode(rawValue: value) ?? .Unknown
+  }
+
+  case Unknown = 0
   case LoginTimeout = 440
   case RetryWith = 449
   case Redirect = 451
@@ -214,6 +231,12 @@ extension HTTPStatusCode
 
 enum NGinxStatusCode: Int, HTTPStatusCodeProtocol
 {
+  init(integerLiteral value: Int)
+  {
+    self = NGinxStatusCode(rawValue: value) ?? .Unknown
+  }
+
+  case Unknown = 0
   case NoResponse = 444
   case SSLCertificateError = 495
   case SSLCertificateRequired = 496
@@ -233,6 +256,12 @@ extension HTTPStatusCode
 
 enum CloudFlareStatusCode: Int, HTTPStatusCodeProtocol
 {
+  init(integerLiteral value: Int)
+  {
+    self = CloudFlareStatusCode(rawValue: value) ?? .Unknown
+  }
+
+  case Unknown = 0
   case UnknownError = 520
   case WebServerIsDown = 521
   case ConnectionTimedOut = 522
