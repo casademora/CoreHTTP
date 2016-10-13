@@ -33,7 +33,7 @@ private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol>(resource: 
   }
   
   var originalRequest = URLRequest(url: requestURL, cachePolicy: cachePolicy, timeoutInterval: requestTimeout)
-  originalRequest.httpMethod = resource.method.rawValue
+  originalRequest.httpMethod = resource.method.value
   
   let requestToSend = process(request: originalRequest)
   return Result( host.authenticate?(requestToSend) ?? requestToSend )
@@ -63,7 +63,7 @@ private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol>(resource: 
 
 /// Utilities
 
-private func convertToQueryItems(source: [String: String]) -> [URLQueryItem]
+fileprivate func convertToQueryItems(source: [String: String]) -> [URLQueryItem]
 {
   guard !source.isEmpty else { return [] }
   

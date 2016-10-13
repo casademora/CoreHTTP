@@ -38,7 +38,7 @@ func completionHandlerForRequest<R: HTTPResourceProtocol>
       >>- validateResponse(error)
       >>- validate(data)
       >>- resource.parse
-    
+
     completion(responseValue)
   }
 }
