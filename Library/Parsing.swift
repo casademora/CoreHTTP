@@ -63,7 +63,7 @@ func serializeJSON(object: AnyObject) -> Result<Data, HTTPResponseError>
   }
 }
 
-private let unableToReadSourceMessage = "<<Unable to read source>>"
+fileprivate let unableToReadSourceMessage = "<<Unable to read source>>"
 
 func sourceStringFrom(data: Data) -> String
 {

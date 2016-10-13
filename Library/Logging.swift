@@ -26,6 +26,7 @@ extension Logger
 {
   func log(level: LogLevel = .Debug, message: String)
   {
+    
     print(message)
   }
 }
