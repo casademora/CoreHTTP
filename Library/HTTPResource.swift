@@ -44,7 +44,7 @@ open class HTTPResource<RequestedType, Method: HTTPMethod>: HTTPResourceProtocol
   }
 }
 
-public class QueriableHTTPResource<RequestedType>: HTTPResource<RequestedType, QueriableHTTPMethod>
+open class QueriableHTTPResource<RequestedType>: HTTPResource<RequestedType, QueriableHTTPMethod>
 {
   public override init(path: String, method: QueriableHTTPMethod = .GET, queryParameters: [String: String] = [:], parse: @escaping (Data) -> ResourceParseResult<RequestedType>)
   {
@@ -52,7 +52,7 @@ public class QueriableHTTPResource<RequestedType>: HTTPResource<RequestedType, Q
   }
 }
 
-public class UpdatableHTTPResource<RequestedType>: HTTPResource<RequestedType, UpdatableHTTPMethod>
+open class UpdatableHTTPResource<RequestedType>: HTTPResource<RequestedType, UpdatableHTTPMethod>
 {
   public override init(path: String, method: UpdatableHTTPMethod = .POST, queryParameters: [String: String] = [:], parse: @escaping (Data) -> ResourceParseResult<RequestedType>)
   {
