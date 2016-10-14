@@ -10,6 +10,7 @@ import Result
 
 public typealias ResponseValidationFunction = (Data?) -> (HTTPURLResponse) -> Result<Data, HTTPResponseError>
 public typealias AuthenticateRequestFunction = (_ request: URLRequest) -> (URLRequest)
+public typealias PreprocessRequestFunction = (URLRequest) -> URLRequest
 
 protocol HTTPHostProtocol: Hashable
 {
@@ -17,21 +18,31 @@ protocol HTTPHostProtocol: Hashable
   var baseURL: NSURL { get }
 
   var session: URLSession { get }
+
+  var preprocessRequest: PreprocessRequestFunction? { get }
   var validate: ResponseValidationFunction { get }
   var authenticate: AuthenticateRequestFunction? { get }
 }
 
 open class HTTPHost: HTTPHostProtocol
 {
-  public let validate: ResponseValidationFunction
-  public let authenticate: AuthenticateRequestFunction?
-  private let configuration: URLSessionConfiguration
   public let baseURLString: String
   
-  public init(baseURLString: String, configuration: URLSessionConfiguration, validate: @escaping ResponseValidationFunction = defaultValidation, authenticate: AuthenticateRequestFunction? = nil)
+  public let preprocessRequest: PreprocessRequestFunction?
+  public let validate: ResponseValidationFunction
+  public let authenticate: AuthenticateRequestFunction?
+  
+  private let configuration: URLSessionConfiguration
+  
+  public init(baseURLString: String,
+              configuration: URLSessionConfiguration,
+              preprocessRequests: PreprocessRequestFunction? = nil,
+              validate: @escaping ResponseValidationFunction = defaultValidation,
+              authenticate: AuthenticateRequestFunction? = nil)
   {
     self.baseURLString = baseURLString
     self.configuration = configuration
+    self.preprocessRequest = preprocessRequests
     self.validate = validate
     self.authenticate = authenticate
   }

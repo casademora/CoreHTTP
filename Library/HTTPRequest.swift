@@ -11,17 +11,13 @@ import Result
 let defaultCachePolicy = URLRequest.CachePolicy.useProtocolCachePolicy
 let defaultTimeout: TimeInterval = 30.seconds
 
-private func process(request: URLRequest) -> URLRequest
-{
-  //set ContentType
-  //set Accept
-  //set Language
-  
-  return request
-}
-
-private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol>(resource: R, host: H, cachePolicy: URLRequest.CachePolicy, requestTimeout: TimeInterval) -> Result<URLRequest, R.ErrorType>
-  where R.ErrorType == HTTPResponseError
+private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol>(
+    resource: R,
+    host: H,
+    cachePolicy: URLRequest.CachePolicy,
+    requestTimeout: TimeInterval)
+  -> Result<URLRequest, R.ErrorType>
+    where R.ErrorType == HTTPResponseError
 {
   guard var components = URLComponents(string: host.baseURLString) else { return Result(error: .hostBaseURLInvalid) }
   
@@ -32,15 +28,28 @@ private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol>(resource: 
     return Result(error: .unableToBuildRequest(path: resource.path, queryParameters: resource.queryParameters))
   }
   
-  var originalRequest = URLRequest(url: requestURL, cachePolicy: cachePolicy, timeoutInterval: requestTimeout)
-  originalRequest.httpMethod = resource.method.value
+  var request = URLRequest(url: requestURL, cachePolicy: cachePolicy, timeoutInterval: requestTimeout)
+  request.httpMethod = resource.method.value
   
-  let requestToSend = process(request: originalRequest)
-  return Result( host.authenticate?(requestToSend) ?? requestToSend )
+  if let preprocessRequest = host.preprocessRequest
+  {
+    request = preprocessRequest(request)
+  }
+  if let authenticate = host.authenticate
+  {
+    request = authenticate(request)
+  }
+  return Result(request)
 }
 
-@discardableResult public func request<R>(resource: R, cachePolicy: URLRequest.CachePolicy = defaultCachePolicy, requestTimeout: TimeInterval = defaultTimeout, host: HTTPHost? = nil, completion: @escaping (Result<R.ResourceType, R.ErrorType>) -> Void) -> URLSessionTask?
-  where R: HostedResource, R: HTTPResourceProtocol, R.ErrorType == HTTPResponseError
+@discardableResult public func request<R>(
+    resource: R,
+    cachePolicy: URLRequest.CachePolicy = defaultCachePolicy,
+    requestTimeout: TimeInterval = defaultTimeout,
+    host: HTTPHost? = nil,
+    completion: @escaping (Result<R.ResourceType, R.ErrorType>) -> Void)
+  -> URLSessionTask?
+    where R: HostedResource, R: HTTPResourceProtocol, R.ErrorType == HTTPResponseError
 {
   guard let hostToQuery = host ?? hostRegistry.hostFor(resource) else {
     completion(Result(error: .hostNotSpecified))

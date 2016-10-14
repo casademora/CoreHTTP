@@ -12,30 +12,30 @@ import Result
 import Foundation
 
 public typealias ResourceParseResult<ResourceType> = Result<ResourceType, HTTPResponseError>
-//public typealias ResourceParseFunction<ResourceType> = (Data) -> ResourceParseResult<ResourceType>
+public typealias ResourceParseFunction<ResourceType> = (Data) -> ResourceParseResult<ResourceType>
 
 public protocol HTTPResourceProtocol
 {
   associatedtype ResourceType
   associatedtype ErrorType: HTTPResourceError
-  associatedtype Method: HTTPMethod
+  associatedtype HTTPMethod: HTTPMethodProtocol
   
   var path: String { get }
-  var method: Method { get }
+  var method: HTTPMethod { get }
   var queryParameters: [String: String] { get }
   var parse: (Data) -> ResourceParseResult<ResourceType> { get }
 }
 
-open class HTTPResource<RequestedType, Method: HTTPMethod>: HTTPResourceProtocol
+open class HTTPResource<RequestedType, Method: HTTPMethodProtocol>: HTTPResourceProtocol
 {
   public typealias ErrorType = HTTPResponseError
   
   public let path: String
   public let method: Method
   public let queryParameters: [String : String]
-  public let parse: (Data) -> ResourceParseResult<RequestedType>
+  public let parse: ResourceParseFunction<RequestedType>
   
-  public init(path: String, method: Method, queryParameters: [String: String] = [:], parse: @escaping (Data) -> ResourceParseResult<RequestedType>)
+  public init(path: String, method: Method, queryParameters: [String: String] = [:], parse: @escaping ResourceParseFunction<RequestedType>)
   {
     self.path = path
     self.method = method
@@ -44,9 +44,10 @@ open class HTTPResource<RequestedType, Method: HTTPMethod>: HTTPResourceProtocol
   }
 }
 
+
 open class QueriableHTTPResource<RequestedType>: HTTPResource<RequestedType, QueriableHTTPMethod>
 {
-  public override init(path: String, method: QueriableHTTPMethod = .GET, queryParameters: [String: String] = [:], parse: @escaping (Data) -> ResourceParseResult<RequestedType>)
+  public override init(path: String, method: QueriableHTTPMethod = .GET, queryParameters: [String: String] = [:], parse: @escaping ResourceParseFunction<RequestedType>)
   {
     super.init(path: path, method: method, queryParameters: queryParameters, parse: parse)
   }
@@ -54,7 +55,7 @@ open class QueriableHTTPResource<RequestedType>: HTTPResource<RequestedType, Que
 
 open class UpdatableHTTPResource<RequestedType>: HTTPResource<RequestedType, UpdatableHTTPMethod>
 {
-  public override init(path: String, method: UpdatableHTTPMethod = .POST, queryParameters: [String: String] = [:], parse: @escaping (Data) -> ResourceParseResult<RequestedType>)
+  public override init(path: String, method: UpdatableHTTPMethod = .POST, queryParameters: [String: String] = [:], parse: @escaping ResourceParseFunction<RequestedType>)
   {
     super.init(path: path, method: method, queryParameters: queryParameters, parse: parse)
   }
