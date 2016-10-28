@@ -19,10 +19,12 @@ private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol>(
   -> Result<URLRequest, R.ErrorType>
     where R.ErrorType == HTTPResponseError
 {
-  guard var components = URLComponents(string: host.baseURLString) else { return Result(error: .hostBaseURLInvalid) }
-  
-  components.path = "/" + resource.path
-  components.queryItems = convertToQueryItems(source: resource.queryParameters)
+  let path = resource.path
+  let requestedURL = host.baseURL.appendingPathComponent(path)
+  guard var components = URLComponents(url: requestedURL, resolvingAgainstBaseURL: false)
+    else { return Result(error: .hostBaseURLInvalid) }
+
+  components.queryItems = host.defaultQueryItems + convertToQueryItems(source: resource.queryParameters)
   
   guard let requestURL = components.url else {
     return Result(error: .unableToBuildRequest(path: resource.path, queryParameters: resource.queryParameters))

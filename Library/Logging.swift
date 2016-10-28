@@ -15,6 +15,21 @@ public enum LogLevel: Int
   case Warn
   case Error
   case Fatal
+  
+  public static func <(left: LogLevel, right: LogLevel) -> Bool
+  {
+    return left.rawValue < right.rawValue
+  }
+  
+  public static func <=(left: LogLevel, right: LogLevel) -> Bool
+  {
+    return left.rawValue <= right.rawValue
+  }
+  
+  public static func >(left: LogLevel, right: LogLevel) -> Bool
+  {
+    return left.rawValue > right.rawValue
+  }
 }
 
 public protocol Logger
@@ -26,7 +41,7 @@ extension Logger
 {
   func log(level: LogLevel = .Debug, message: String)
   {
-    
+    guard level < currentLogLevel else { return }
     print(message)
   }
 }

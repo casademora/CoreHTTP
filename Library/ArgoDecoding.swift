@@ -10,10 +10,10 @@ import Runes
 import Argo
 import Result
 
-func decode<T: Decodable>(rootKey: String) -> (AnyObject) -> Result<T, HTTPResponseError> where T == T.DecodedType
+func decode<T: Decodable>(rootKey: String) -> (Any) -> Result<T, HTTPResponseError> where T == T.DecodedType
 {
   return { objectData in
-    guard let decodable = objectData as? [String : AnyObject] else { return Result(error: .invalidResponseType) }
+    guard let decodable = objectData as? [String : Any] else { return Result(error: .invalidResponseType) }
     let result: Decoded<T> = decode(decodable, rootKey: rootKey)
     
     return (transform <^> objectData <*> result)
@@ -21,7 +21,7 @@ func decode<T: Decodable>(rootKey: String) -> (AnyObject) -> Result<T, HTTPRespo
   }
 }
 
-func decode<T: Decodable>(objectData: AnyObject) -> Result<T, HTTPResponseError> where T == T.DecodedType
+func decode<T: Decodable>(objectData: Any) -> Result<T, HTTPResponseError> where T == T.DecodedType
 {
   let result: Decoded<T> = decode(objectData)
   
@@ -29,10 +29,10 @@ func decode<T: Decodable>(objectData: AnyObject) -> Result<T, HTTPResponseError>
     ?? Result(error: .deserializationFailure(message: "Object Data \(objectData)"))
 }
 
-func decode<T: Decodable>(rootKey: String) -> (AnyObject) -> Result<[T], HTTPResponseError> where T == T.DecodedType
+func decode<T: Decodable>(rootKey: String) -> (Any) -> Result<[T], HTTPResponseError> where T == T.DecodedType
 {
   return { objectData in
-    guard let decodable = objectData as? [String : AnyObject] else { return Result(error: .invalidResponseType) }
+    guard let decodable = objectData as? [String : Any] else { return Result(error: .invalidResponseType) }
     let result: Decoded<[T]> = decode(decodable, rootKey: rootKey)
     
     return (transform <^> objectData <*> result)
@@ -40,14 +40,14 @@ func decode<T: Decodable>(rootKey: String) -> (AnyObject) -> Result<[T], HTTPRes
   }
 }
 
-func decode<T: Decodable>(objectData: AnyObject) -> Result<[T], HTTPResponseError> where T == T.DecodedType
+func decode<T: Decodable>(objectData: Any) -> Result<[T], HTTPResponseError> where T == T.DecodedType
 {
   let result: Decoded<[T]> = decode(objectData)
   return (transform <^> objectData <*> result)
     ?? Result(error: .deserializationFailure(message: "Object Data: \(objectData)"))
 }
 
-private func transform<T: Decodable>(objectData: AnyObject) -> (Decoded<T>) -> Result<T, HTTPResponseError> where T == T.DecodedType
+fileprivate func transform<T: Decodable>(objectData: Any) -> (Decoded<T>) -> Result<T, HTTPResponseError> where T == T.DecodedType
 {
   return { result in
     switch result {
@@ -60,7 +60,7 @@ private func transform<T: Decodable>(objectData: AnyObject) -> (Decoded<T>) -> R
   }
 }
 
-private func transform<T: Decodable>(objectData: AnyObject) -> (Decoded<[T]>) -> Result<[T], HTTPResponseError> where T == T.DecodedType
+fileprivate func transform<T: Decodable>(objectData: Any) -> (Decoded<[T]>) -> Result<[T], HTTPResponseError> where T == T.DecodedType
 {
   return { result in
     switch result {

@@ -32,9 +32,14 @@ struct HostRegistry
 
 private(set) var hostRegistry = HostRegistry()
 
-public func configure<H: HTTPHost>(host: H)
+public func register<H: HTTPHost>(host: H)
 {
   hostRegistry.register(host)
+}
+
+public func unregister<H: HTTPHost>(host: H)
+{
+  hostRegistry.unregister(host)
 }
 
 public protocol HostedResource

@@ -15,9 +15,10 @@ public typealias PreprocessRequestFunction = (URLRequest) -> URLRequest
 protocol HTTPHostProtocol: Hashable
 {
   var baseURLString: String { get }
-  var baseURL: NSURL { get }
+  var baseURL: URL { get }
 
   var session: URLSession { get }
+  var defaultQueryItems: [URLQueryItem] { get }
 
   var preprocessRequest: PreprocessRequestFunction? { get }
   var validate: ResponseValidationFunction { get }
@@ -32,10 +33,12 @@ open class HTTPHost: HTTPHostProtocol
   public let validate: ResponseValidationFunction
   public let authenticate: AuthenticateRequestFunction?
   
+  public let defaultQueryItems: [URLQueryItem]
   private let configuration: URLSessionConfiguration
   
   public init(baseURLString: String,
               configuration: URLSessionConfiguration,
+              defaultQueryItems: [URLQueryItem] = [],
               preprocessRequests: PreprocessRequestFunction? = nil,
               validate: @escaping ResponseValidationFunction = defaultValidation,
               authenticate: AuthenticateRequestFunction? = nil)
@@ -45,6 +48,7 @@ open class HTTPHost: HTTPHostProtocol
     self.preprocessRequest = preprocessRequests
     self.validate = validate
     self.authenticate = authenticate
+    self.defaultQueryItems = defaultQueryItems
   }
   
   open func applyAdditionalConfiguration(_ configuration: URLSessionConfiguration)
@@ -64,9 +68,9 @@ open class HTTPHost: HTTPHostProtocol
 
 extension HTTPHost: Hashable
 {
-  var baseURL: NSURL
+  var baseURL: URL
   {
-    return NSURL(string: baseURLString)!
+    return URL(string: baseURLString)!
   }
   
   public var hashValue: Int
