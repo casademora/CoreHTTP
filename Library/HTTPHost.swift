@@ -9,8 +9,18 @@
 import Result
 
 public typealias ResponseValidationFunction = (Data?) -> (HTTPURLResponse) -> Result<Data, HTTPResponseError>
-public typealias AuthenticateRequestFunction = (_ request: URLRequest) -> (URLRequest)
+public typealias AuthenticateURLRequestFunction = (_ request: URLRequest) -> (URLRequest)
 public typealias PreprocessRequestFunction = (URLRequest) -> URLRequest
+
+public typealias AuthenticationToken = String
+public enum AuthenticationType
+{
+  case QueryParameters(String, AuthenticationToken)
+  case Basic(AuthenticationToken)
+  case OAuth(AuthenticationToken)
+}
+
+public typealias GenerateAuthenticationCredentialsFunction = (Void) -> (AuthenticationType)
 
 protocol HTTPHostProtocol: Hashable
 {
@@ -18,11 +28,9 @@ protocol HTTPHostProtocol: Hashable
   var baseURL: URL { get }
 
   var session: URLSession { get }
-  var defaultQueryItems: [URLQueryItem] { get }
 
-  var preprocessRequest: PreprocessRequestFunction? { get }
   var validate: ResponseValidationFunction { get }
-  var authenticate: AuthenticateRequestFunction? { get }
+  var authentication: GenerateAuthenticationCredentialsFunction? { get }
 }
 
 open class HTTPHost: HTTPHostProtocol
@@ -31,24 +39,21 @@ open class HTTPHost: HTTPHostProtocol
   
   public let preprocessRequest: PreprocessRequestFunction?
   public let validate: ResponseValidationFunction
-  public let authenticate: AuthenticateRequestFunction?
+  public let authentication: GenerateAuthenticationCredentialsFunction?
   
-  public let defaultQueryItems: [URLQueryItem]
   private let configuration: URLSessionConfiguration
   
   public init(baseURLString: String,
               configuration: URLSessionConfiguration,
-              defaultQueryItems: [URLQueryItem] = [],
               preprocessRequests: PreprocessRequestFunction? = nil,
               validate: @escaping ResponseValidationFunction = defaultValidation,
-              authenticate: AuthenticateRequestFunction? = nil)
+              authentication: GenerateAuthenticationCredentialsFunction? = nil)
   {
     self.baseURLString = baseURLString
     self.configuration = configuration
     self.preprocessRequest = preprocessRequests
     self.validate = validate
-    self.authenticate = authenticate
-    self.defaultQueryItems = defaultQueryItems
+    self.authentication = authentication
   }
   
   open func applyAdditionalConfiguration(_ configuration: URLSessionConfiguration)

@@ -24,7 +24,15 @@ private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol>(
   guard var components = URLComponents(url: requestedURL, resolvingAgainstBaseURL: false)
     else { return Result(error: .hostBaseURLInvalid) }
 
-  components.queryItems = host.defaultQueryItems + convertToQueryItems(source: resource.queryParameters)
+  let authentication = host.authentication?()
+
+  var queryItems: [URLQueryItem] = []
+  if let authentication = authentication, case let .QueryParameters(key, value) = authentication
+  {
+    queryItems.append(URLQueryItem(name: key, value: value))
+  }
+  queryItems.append(contentsOf: convertToQueryItems(source: resource.queryParameters))
+  components.queryItems = queryItems
   
   guard let requestURL = components.url else {
     return Result(error: .unableToBuildRequest(path: resource.path, queryParameters: resource.queryParameters))
@@ -32,23 +40,23 @@ private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol>(
   
   var request = URLRequest(url: requestURL, cachePolicy: cachePolicy, timeoutInterval: requestTimeout)
   request.httpMethod = resource.method.value
-  
-  if let preprocessRequest = host.preprocessRequest
+
+  if let authentication = authentication, case let .Basic(token) = authentication
   {
-    request = preprocessRequest(request)
+    request.addValue("Basic \(token)", forHTTPHeaderField: "Authorization")
   }
-  if let authenticate = host.authenticate
+  else if let auth = authentication, case let .OAuth(token) = auth
   {
-    request = authenticate(request)
+    request.addValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
   }
   return Result(request)
 }
 
 @discardableResult public func request<R>(
     resource: R,
-    cachePolicy: URLRequest.CachePolicy = defaultCachePolicy,
-    requestTimeout: TimeInterval = defaultTimeout,
-    host: HTTPHost? = nil,
+    from host: HTTPHost? = nil,
+    cacheWith cachePolicy: URLRequest.CachePolicy = defaultCachePolicy,
+    timeoutAfter requestTimeout: TimeInterval = defaultTimeout,
     completion: @escaping (Result<R.ResourceType, R.ErrorType>) -> Void)
   -> URLSessionTask?
     where R: HostedResource, R: HTTPResourceProtocol, R.ErrorType == HTTPResponseError
@@ -60,10 +68,10 @@ private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol>(
   
   let completionHandler = completionHandlerForRequest(resource: resource, validate: hostToQuery.validate, completion: completion)
   
-  let request = requestFor(resource: resource, host: hostToQuery, cachePolicy: cachePolicy, requestTimeout: requestTimeout)
+  let sessionTask = requestFor(resource: resource, host: hostToQuery, cachePolicy: cachePolicy, requestTimeout: requestTimeout)
     >>- { Result(hostToQuery.session.dataTask(with: $0, completionHandler: completionHandler)) }
   
-  let task = request.map { requestTask -> URLSessionTask in
+  let task = sessionTask.map { requestTask -> URLSessionTask in
     log(level: .Debug, message: "Sending Request: \(requestTask.currentRequest?.url)")
     requestTask.resume()
     return requestTask

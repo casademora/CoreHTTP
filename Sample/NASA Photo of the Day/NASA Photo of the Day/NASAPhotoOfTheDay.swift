@@ -13,8 +13,8 @@ class NASAAPODHost: HTTPHost
 {
   init(apiKey: String)
   {
-    let queryItem = URLQueryItem(name: "api_key", value: apiKey)
-    super.init(baseURLString: "https://api.nasa.gov/planetary", configuration: .default, defaultQueryItems: [queryItem])
+    let generateCredentials: GenerateAuthenticationCredentialsFunction = { .QueryParameters("api_key", apiKey) }
+    super.init(baseURLString: "https://api.nasa.gov/planetary", configuration: .default, authentication: generateCredentials)
   }
 }
 
