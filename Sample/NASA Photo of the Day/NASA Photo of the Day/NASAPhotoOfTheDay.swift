@@ -18,14 +18,10 @@ class NASAAPODHost: HTTPHost
   }
 }
 
-class NASAAPODHTTPResource<T>: HTTPResource<T, AnyHTTPMethod>, HostedResource
+class NASAAPODHTTPResource<T>: HTTPResource<T, QueriableHTTPMethod>, HostedResource
 {
-  var HostType: AnyClass
-  {
-    return NASAAPODHost.self
-  }
+  let hostType: NASAAPODHost.Type = NASAAPODHost.self
 }
-
 
 
 func astronomyPhotoOfTheDay(date: Date? = nil, includeHDPhoto: Bool = false) -> NASAAPODHTTPResource<Photo>

@@ -16,7 +16,7 @@ struct HostRegistry
   
   func hostFor<Resource: HostedResource>(_ resource: Resource) -> HTTPHost?
   {
-    return collection.filter { type(of: $0) == resource.HostType }.first
+    return collection.filter { type(of: $0) == type(of: resource.hostType) }.first
   }
   
   mutating func register<Host: HTTPHost>(_ host: Host)
@@ -44,6 +44,7 @@ public func unregister<H: HTTPHost>(host: H)
 
 public protocol HostedResource
 {
-  var HostType: AnyClass { get }
+  associatedtype HostType
+  var hostType: HostType { get }
 }
 

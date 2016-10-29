@@ -14,21 +14,38 @@ class ViewController: UIViewController
   @IBOutlet var imageView: UIImageView!
   @IBOutlet var spinner: UIActivityIndicatorView!
 
+  private lazy var host = NASAAPODHost(apiKey: "NNKOjkoul8n1CH18TWA9gwngW1s1SmjESPjNoUFo")
+  
   @IBAction func reloadImage(button: UIButton)
   {
     spinner.startAnimating()
     button.isEnabled = false
-    request(resource: astronomyPhotoOfTheDay()) { result in
+    
+    print("Starting request for photo")
+    host.request(resource: astronomyPhotoOfTheDay()) { result in
       
-      guard let imageURL = result.value?.url else { return }
+      print("Photo request completed")
+      defer {
+        DispatchQueue.main.async {
+          button.isEnabled = true
+          self.spinner.stopAnimating()
+        }
+      }
       
-      let imageData = try! Data(contentsOf: imageURL)
+      _ = result.map { photoData -> Photo in
+        let imageURL = photoData.url!
+        print("Loading image at: \(imageURL)")
+        
+        let imageData = try! Data(contentsOf: imageURL)
+        print("Loaded photo of the day")
+        DispatchQueue.main.async {
+          self.imageView.image = UIImage(data: imageData)
+        }
+        return photoData
+      }.mapError { error -> HTTPResponseError in
       
-      DispatchQueue.main.async {
-
-        self.imageView.image = UIImage(data: imageData)
-        self.spinner.stopAnimating()
-        button.isEnabled = true
+        print("Error Loading image \(error)")
+        return error
       }
     }
   }

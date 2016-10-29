@@ -22,7 +22,7 @@ public enum AuthenticationType
 
 public typealias GenerateAuthenticationCredentialsFunction = (Void) -> (AuthenticationType)
 
-protocol HTTPHostProtocol: Hashable
+public protocol HTTPHostProtocol: Hashable
 {
   var baseURLString: String { get }
   var baseURL: URL { get }
@@ -31,6 +31,14 @@ protocol HTTPHostProtocol: Hashable
 
   var validate: ResponseValidationFunction { get }
   var authentication: GenerateAuthenticationCredentialsFunction? { get }
+
+  @discardableResult func request<R: HostedResource & HTTPResourceProtocol>(
+    resource: R,
+    cacheWith cachePolicy: URLRequest.CachePolicy,
+    timeoutAfter requestTimeout: TimeInterval,
+    completion: @escaping (Result<R.ResourceType, R.ErrorType>) -> Void
+  ) -> URLSessionTask?
+  where R.ErrorType == HTTPResponseError
 }
 
 open class HTTPHost: HTTPHostProtocol
@@ -68,12 +76,11 @@ open class HTTPHost: HTTPHostProtocol
     self.applyAdditionalConfiguration(self.configuration)
     return URLSession(configuration: self.configuration, delegate: nil, delegateQueue: nil)
   }()
-
 }
 
 extension HTTPHost: Hashable
 {
-  var baseURL: URL
+  public var baseURL: URL
   {
     return URL(string: baseURLString)!
   }

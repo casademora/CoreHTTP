@@ -26,16 +26,16 @@ public protocol HTTPResourceProtocol
   var parse: (Data) -> ResourceParseResult<ResourceType> { get }
 }
 
-open class HTTPResource<RequestedType, Method: HTTPMethodProtocol>: HTTPResourceProtocol
+open class HTTPResource<RequestedType, HTTPMethod: HTTPMethodProtocol>: HTTPResourceProtocol
 {
   public typealias ErrorType = HTTPResponseError
   
   public let path: String
-  public let method: Method
+  public let method: HTTPMethod
   public let queryParameters: [String : String]
   public let parse: ResourceParseFunction<RequestedType>
   
-  public init(path: String, method: Method, queryParameters: [String: String] = [:], parse: @escaping ResourceParseFunction<RequestedType>)
+  public init(path: String, method: HTTPMethod, queryParameters: [String: String] = [:], parse: @escaping ResourceParseFunction<RequestedType>)
   {
     self.path = path
     self.method = method
@@ -43,7 +43,6 @@ open class HTTPResource<RequestedType, Method: HTTPMethodProtocol>: HTTPResource
     self.parse = parse
   }
 }
-
 
 open class QueriableHTTPResource<RequestedType>: HTTPResource<RequestedType, QueriableHTTPMethod>
 {

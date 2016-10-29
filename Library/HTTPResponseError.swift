@@ -10,6 +10,16 @@ public protocol HTTPResourceError: Error
 {
 }
 
+//public enum HTTPRequestError: HTTPResourceError
+//{
+//  case unknown
+//  case hostForRequestNotFound
+//  case hostNotSpecified
+//  case hostBaseURLInvalid
+//  
+//  case unableToBuildRequest(path: String, queryParameters: [String: String])
+//}
+
 public enum HTTPResponseError: HTTPResourceError
 {
   case unknown
@@ -19,6 +29,7 @@ public enum HTTPResponseError: HTTPResourceError
   case invalidResponseType
   case hostNotSpecified
   case hostBaseURLInvalid
+  case resourceRequestAgainstIncorrectHost(resourceType: String, hostType: String)
   case unableToBuildRequest(path: String, queryParameters: [String: String])
   
   case unexpectedHTTPStatus(statusCode: HTTPStatusCode, description: String)
@@ -32,3 +43,12 @@ public enum HTTPResponseError: HTTPResourceError
     return .unexpectedHTTPStatus(statusCode: statusCode, description: statusCode.localizedDescription)
   }
 }
+
+//public enum HTTPResponseParseError: HTTPResourceError
+//{
+//  case invalidResponseType
+//  case decodingFailure(description: String, source: String)
+//  case deserializationFailure(message: String) 
+//}
+//
+

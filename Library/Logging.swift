@@ -47,9 +47,14 @@ extension Logger
 }
 
 public var currentLogLevel: LogLevel = .Debug
-public var currentLogger: Logger?
+public var currentLogger: Logger? = ConsoleLogger()
 
 func log(level: LogLevel = .Debug, message: String)
 {
   currentLogger?.log(level: level, message: message)
+}
+
+
+struct ConsoleLogger: Logger
+{
 }

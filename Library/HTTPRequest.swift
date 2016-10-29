@@ -52,32 +52,51 @@ private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol>(
   return Result(request)
 }
 
-@discardableResult public func request<R>(
+@discardableResult public func request<R: HostedResource & HTTPResourceProtocol>(
     resource: R,
     from host: HTTPHost? = nil,
     cacheWith cachePolicy: URLRequest.CachePolicy = defaultCachePolicy,
     timeoutAfter requestTimeout: TimeInterval = defaultTimeout,
     completion: @escaping (Result<R.ResourceType, R.ErrorType>) -> Void)
   -> URLSessionTask?
-    where R: HostedResource, R: HTTPResourceProtocol, R.ErrorType == HTTPResponseError
+  where R.ErrorType == HTTPResponseError
 {
   guard let hostToQuery = host ?? hostRegistry.hostFor(resource) else {
     completion(Result(error: .hostNotSpecified))
     return nil
   }
-  
-  let completionHandler = completionHandlerForRequest(resource: resource, validate: hostToQuery.validate, completion: completion)
-  
-  let sessionTask = requestFor(resource: resource, host: hostToQuery, cachePolicy: cachePolicy, requestTimeout: requestTimeout)
-    >>- { Result(hostToQuery.session.dataTask(with: $0, completionHandler: completionHandler)) }
-  
-  let task = sessionTask.map { requestTask -> URLSessionTask in
-    log(level: .Debug, message: "Sending Request: \(requestTask.currentRequest?.url)")
-    requestTask.resume()
-    return requestTask
+
+  return hostToQuery.request(resource: resource, cacheWith: cachePolicy, timeoutAfter: requestTimeout, completion: completion)
+}
+
+extension HTTPHostProtocol
+{
+  @discardableResult
+  public func request<R: HTTPResourceProtocol & HostedResource>(
+    resource: R,
+    cacheWith cachePolicy: URLRequest.CachePolicy = defaultCachePolicy,
+    timeoutAfter requestTimeout: TimeInterval = defaultTimeout,
+    completion: @escaping (Result<R.ResourceType, R.ErrorType>) -> Void
+  ) -> URLSessionTask?
+  where R.ErrorType == HTTPResponseError
+  {
+//    guard type(of: resource.hostType) === type(of: self) else
+//    {
+//      let resourceType = String(describing: type(of: resource.hostType))
+//      let hostType = String(describing: type(of: self))
+//      completion(Result(error: .resourceRequestAgainstIncorrectHost(resourceType: resourceType, hostType: hostType)))
+//      return nil
+//    }
+    
+    let completionHandler = completionHandlerForRequest(resource: resource, validate: self.validate, completion: completion)
+    
+    let request = requestFor(resource: resource, host: self, cachePolicy: cachePolicy, requestTimeout: requestTimeout)
+    let sessionTask = session.dataTask(with: request.value!, completionHandler: completionHandler)
+
+    log(level: .Debug, message: "Sending Request: \(sessionTask.currentRequest?.url)")
+    sessionTask.resume()
+    return sessionTask
   }
-  
-  return task.value
 }
 
 /// Utilities
