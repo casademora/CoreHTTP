@@ -20,7 +20,7 @@ class NASAAPODHost: HTTPHost
 
 class NASAAPODHTTPResource<T>: HTTPResource<T, QueriableHTTPMethod>, HostedResource
 {
-  let hostType: NASAAPODHost.Type = NASAAPODHost.self
+  let hostType: AnyClass = NASAAPODHost.self
 }
 
 

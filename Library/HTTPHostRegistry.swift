@@ -44,7 +44,7 @@ public func unregister<H: HTTPHost>(host: H)
 
 public protocol HostedResource
 {
-  associatedtype HostType
-  var hostType: HostType { get }
+//  associatedtype HostType
+  var hostType: AnyClass { get }
 }
 

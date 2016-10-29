@@ -71,6 +71,18 @@ private func requestFor<H: HTTPHostProtocol, R: HTTPResourceProtocol>(
 
 extension HTTPHostProtocol
 {
+  private func canRequestResource<R: HTTPResourceProtocol & HostedResource>(resource: R) -> Result<Void, HTTPResponseError>
+  {
+    let resourceIsCompatible: Bool = type(of: resource.hostType) == type(of: self)
+    if !resourceIsCompatible
+    {
+      let resourceType = String(describing: type(of: resource.hostType))
+      let hostType = String(describing: type(of: self))
+      return .failure(.resourceRequestAgainstIncorrectHost(resourceType: resourceType, hostType: hostType))
+    }
+    return .success()
+  }
+  
   @discardableResult
   public func request<R: HTTPResourceProtocol & HostedResource>(
     resource: R,
@@ -80,22 +92,20 @@ extension HTTPHostProtocol
   ) -> URLSessionTask?
   where R.ErrorType == HTTPResponseError
   {
-//    guard type(of: resource.hostType) === type(of: self) else
-//    {
-//      let resourceType = String(describing: type(of: resource.hostType))
-//      let hostType = String(describing: type(of: self))
-//      completion(Result(error: .resourceRequestAgainstIncorrectHost(resourceType: resourceType, hostType: hostType)))
-//      return nil
-//    }
-    
-    let completionHandler = completionHandlerForRequest(resource: resource, validate: self.validate, completion: completion)
-    
     let request = requestFor(resource: resource, host: self, cachePolicy: cachePolicy, requestTimeout: requestTimeout)
-    let sessionTask = session.dataTask(with: request.value!, completionHandler: completionHandler)
-
-    log(level: .Debug, message: "Sending Request: \(sessionTask.currentRequest?.url)")
-    sessionTask.resume()
-    return sessionTask
+    let sessionTask = request
+      .map{ request -> URLSessionDataTask in
+        
+        let completionHandler = completionHandlerForRequest(resource: resource, validate: validate, completion: completion)
+        return self.session.dataTask(with: request, completionHandler: completionHandler)
+      }.map { task -> URLSessionDataTask in
+        
+        log(level: .Debug, message: "Sending Request: \(task.currentRequest?.url)")
+        task.resume()
+        return task
+      }
+    
+    return sessionTask.value
   }
 }
 
