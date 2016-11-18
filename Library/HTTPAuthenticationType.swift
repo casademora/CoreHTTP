@@ -65,7 +65,7 @@ public enum HTTPAuthenticationType
       let url = request.url,
       var components = URLComponents(url: url, resolvingAgainstBaseURL: false),
       case let .queryParameters(key, value) = self
-      else { return request }
+    else { return request }
     
     var queryItems = components.queryItems ?? []
     queryItems.append(URLQueryItem(name: key, value: value))

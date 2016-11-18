@@ -11,25 +11,10 @@ public protocol HTTPMethodProtocol: RawRepresentable
   var value: String { get }
 }
 
-/*
-extension HTTPMethodProtocol where RawValue == String: ExpressibleByStringLiteral, RawRepresentable
+extension HTTPMethodProtocol where RawValue == String
 {
-  public init(stringLiteral value: StringLiteralType)
-  {
-    self = QueriableHTTPMethod(rawValue: value) ?? .unknown
-  }
-  
-  public init(unicodeScalarLiteral value: StringLiteralType)
-  {
-    self = QueriableHTTPMethod(rawValue: value) ?? .unknown
-  }
-  
-  public init(extendedGraphemeClusterLiteral value: StringLiteralType)
-  {
-    self = self.init(rawValue: value) ?? .unknown
-  }
+  public var value: String { return rawValue }
 }
- */
 
 public enum AnyHTTPMethod: String, HTTPMethodProtocol
 {
@@ -42,8 +27,6 @@ public enum AnyHTTPMethod: String, HTTPMethodProtocol
   case POST
   case PUT
   case DELETE
-  
-  public var value: String { return rawValue }
 }
 
 public enum QueriableHTTPMethod: String, HTTPMethodProtocol
@@ -54,8 +37,6 @@ public enum QueriableHTTPMethod: String, HTTPMethodProtocol
   case OPTIONS
   case TRACE
   case CONNECT
-  
-  public var value: String { return rawValue }
 }
 
 public enum UpdatableHTTPMethod: String, HTTPMethodProtocol
@@ -64,7 +45,5 @@ public enum UpdatableHTTPMethod: String, HTTPMethodProtocol
   case POST
   case PUT
   case DELETE
-  
-  public var value: String { return rawValue }
 }
 
