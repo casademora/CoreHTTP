@@ -94,7 +94,7 @@ extension HTTPHostProtocol
   {
     let request = requestFor(resource: resource, host: self, cachePolicy: cachePolicy, requestTimeout: requestTimeout)
     let sessionTask = request
-      .map{ request -> URLSessionDataTask in
+      .map { request -> URLSessionDataTask in
         
         let completionHandler = completionHandlerForRequest(resource: resource, validate: validate, completion: completion)
         return self.session.dataTask(with: request, completionHandler: completionHandler)
