@@ -25,7 +25,8 @@ public protocol HTTPHostProtocol: Hashable
 
   func canRequestResource<R: HTTPResourceProtocol & HostedResource>(resource: R) -> Bool
   
-  @discardableResult func request<R: HostedResource & HTTPResourceProtocol>(
+  @discardableResult func request<R: HostedResource & HTTPResourceProtocol>
+  (
     resource: R,
     cacheWith cachePolicy: URLRequest.CachePolicy,
     timeoutAfter requestTimeout: TimeInterval,
@@ -65,9 +66,10 @@ open class HTTPHost: HTTPHostProtocol
       ]
   }
   
-  public lazy var session: URLSession = {
-    self.applyAdditionalConfiguration(self.configuration)
-    return URLSession(configuration: self.configuration, delegate: nil, delegateQueue: nil)
+  public private(set) lazy var session: URLSession = {
+    let configuration = self.configuration
+    self.applyAdditionalConfiguration(configuration)
+    return URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
   }()
 }
 

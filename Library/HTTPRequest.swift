@@ -27,10 +27,7 @@ private func buildRequestFor<H, R>(
   guard var components = URLComponents(url: requestedURL, resolvingAgainstBaseURL: false)
     else { return Result(error: .hostBaseURLInvalid) }
 
-  var queryItems: [URLQueryItem] = []
-
-  queryItems.append(contentsOf: convertToQueryItems(source: resource.queryParameters))
-  components.queryItems = queryItems
+  components.queryItems = convertToQueryItems(source: resource.queryParameters)
   
   guard let requestURL = components.url else {
     return Result(error: .unableToBuildRequest(path: resource.path, queryParameters: resource.queryParameters))
