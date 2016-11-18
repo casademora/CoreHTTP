@@ -8,14 +8,13 @@
 
 //https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
 
-public protocol HTTPStatusCodeProtocol: ExpressibleByIntegerLiteral
+public protocol HTTPStatusCodeProtocol: RawRepresentable, ExpressibleByIntegerLiteral
 {
-  var rawValue: Int { get }
   var code: Int { get }
   var localizedDescription: String { get }
 }
 
-extension HTTPStatusCodeProtocol
+extension HTTPStatusCodeProtocol where RawValue == Int
 {
   public var code: Int
   {

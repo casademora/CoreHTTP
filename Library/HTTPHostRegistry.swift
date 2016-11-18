@@ -14,9 +14,10 @@ struct HostRegistry
   
   fileprivate init() {}
   
-  func hostFor<Resource: HostedResource>(_ resource: Resource) -> HTTPHost?
+  func hostFor<R>(_ resource: R) -> HTTPHost?
+  where R: HTTPResourceProtocol & HostedResource
   {
-    return collection.filter { type(of: $0) == type(of: resource.hostType) }.first
+    return collection.filter { $0.canRequestResource(resource: resource) }.first
   }
   
   mutating func register<Host: HTTPHost>(_ host: Host)
@@ -44,7 +45,6 @@ public func unregister<H: HTTPHost>(host: H)
 
 public protocol HostedResource
 {
-//  associatedtype HostType
   var hostType: AnyClass { get }
 }
 

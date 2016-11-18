@@ -13,7 +13,7 @@ class NASAAPODHost: HTTPHost
 {
   init(apiKey: String)
   {
-    let generateCredentials: GenerateAuthenticationCredentialsFunction = { .QueryParameters("api_key", apiKey) }
+    let generateCredentials: GenerateAuthenticationCredentialsFunction = { .queryParameters("api_key", apiKey) }
     super.init(baseURLString: "https://api.nasa.gov/planetary", configuration: .default, authentication: generateCredentials)
   }
 }

@@ -11,6 +11,7 @@ import CoreHTTP
 
 class ViewController: UIViewController
 {
+  @IBOutlet var progressView: UIProgressView!
   @IBOutlet var imageView: UIImageView!
   @IBOutlet var spinner: UIActivityIndicatorView!
 
@@ -20,14 +21,17 @@ class ViewController: UIViewController
   {
     spinner.startAnimating()
     button.isEnabled = false
+    progressView.isHidden = false
     
     print("Starting request for photo")
+    
     host.request(resource: astronomyPhotoOfTheDay()) { result in
       
       print("Photo request completed")
       defer {
         DispatchQueue.main.async {
           button.isEnabled = true
+          self.progressView.isHidden = true
           self.spinner.stopAnimating()
         }
       }

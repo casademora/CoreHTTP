@@ -59,3 +59,8 @@ open class UpdatableHTTPResource<RequestedType>: HTTPResource<RequestedType, Upd
     super.init(path: path, method: method, queryParameters: queryParameters, parse: parse)
   }
 }
+
+open class DownloadableHTTPResource<RequestedType>: QueriableHTTPResource<RequestedType>
+{
+
+}

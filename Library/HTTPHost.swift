@@ -15,9 +15,70 @@ public typealias PreprocessRequestFunction = (URLRequest) -> URLRequest
 public typealias AuthenticationToken = String
 public enum AuthenticationType
 {
-  case QueryParameters(String, AuthenticationToken)
-  case Basic(AuthenticationToken)
-  case OAuth(AuthenticationToken)
+  case none
+  case queryParameters(String, AuthenticationToken)
+  case basic(AuthenticationToken)
+  case oauth(AuthenticationToken)
+  
+  var authenticationHeaderValue: String
+  {
+    switch self
+    {
+      case .basic(let token):
+        return "Basic \(token)"
+      case .oauth(let token):
+        return "Bearer \(token)"
+      default:
+        return ""
+    }
+  }
+
+  func authenticate(request: URLRequest) -> URLRequest
+  {
+    func authentication() -> (URLRequest) -> URLRequest
+    {
+      switch self
+      {
+        case .queryParameters:
+          return authenticateQuery
+        case .basic(_), .oauth(_):
+          return authenticateHeader
+        case .none:
+          return noAuthentication
+      }
+    }
+    let function = authentication()
+    return function(request)
+  }
+  
+  private func noAuthentication(request: URLRequest) -> URLRequest
+  {
+    return request
+  }
+  
+  private func authenticateHeader(request: URLRequest) -> URLRequest
+  {
+    var authenticatedRequest = request
+    authenticatedRequest.setValue(authenticationHeaderValue, forHTTPHeaderField: "Authorization")
+    return authenticatedRequest
+  }
+
+  private func authenticateQuery(request: URLRequest) -> URLRequest
+  {
+    guard
+      let url = request.url,
+      var components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+      case let .queryParameters(key, value) = self
+    else { return request }
+    
+    var queryItems = components.queryItems ?? []
+    queryItems.append(URLQueryItem(name: key, value: value))
+    components.queryItems = queryItems
+    
+    var authenticatedRequest = request
+    authenticatedRequest.url = components.url
+    return authenticatedRequest
+  }
 }
 
 public typealias GenerateAuthenticationCredentialsFunction = (Void) -> (AuthenticationType)
@@ -30,8 +91,10 @@ public protocol HTTPHostProtocol: Hashable
   var session: URLSession { get }
 
   var validate: ResponseValidationFunction { get }
-  var authentication: GenerateAuthenticationCredentialsFunction? { get }
+  var authentication: GenerateAuthenticationCredentialsFunction { get }
 
+  func canRequestResource<R: HTTPResourceProtocol & HostedResource>(resource: R) -> Bool
+  
   @discardableResult func request<R: HostedResource & HTTPResourceProtocol>(
     resource: R,
     cacheWith cachePolicy: URLRequest.CachePolicy,
@@ -47,7 +110,7 @@ open class HTTPHost: HTTPHostProtocol
   
   public let preprocessRequest: PreprocessRequestFunction?
   public let validate: ResponseValidationFunction
-  public let authentication: GenerateAuthenticationCredentialsFunction?
+  public let authentication: GenerateAuthenticationCredentialsFunction
   
   private let configuration: URLSessionConfiguration
   
@@ -55,7 +118,7 @@ open class HTTPHost: HTTPHostProtocol
               configuration: URLSessionConfiguration,
               preprocessRequests: PreprocessRequestFunction? = nil,
               validate: @escaping ResponseValidationFunction = defaultValidation,
-              authentication: GenerateAuthenticationCredentialsFunction? = nil)
+              authentication: @escaping GenerateAuthenticationCredentialsFunction = defaultAuthentication)
   {
     self.baseURLString = baseURLString
     self.configuration = configuration
@@ -96,13 +159,18 @@ public func ==<H: HTTPHost>(lhs: H, rhs: H) -> Bool
   return lhs.baseURLString == rhs.baseURLString
 }
 
-private func defaultValidation(data: Data?) -> (HTTPURLResponse) -> Result<Data, HTTPResponseError>
+fileprivate func defaultValidation(data: Data?) -> (HTTPURLResponse) -> Result<Data, HTTPResponseError>
 {
   return { response in
      response.isSuccess ?
       Result(data, failWith: .responseFailure(response)) :
       Result(error: .responseFailure(response))
   }
+}
+
+fileprivate func defaultAuthentication() -> AuthenticationType
+{
+  return .none
 }
 
 private func buildUserAgent() -> String
