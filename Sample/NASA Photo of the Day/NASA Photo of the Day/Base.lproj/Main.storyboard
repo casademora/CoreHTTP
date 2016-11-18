@@ -55,6 +55,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="button" destination="xc5-0c-ebQ" id="b79-D1-rnL"/>
                         <outlet property="imageView" destination="B9d-nG-pdh" id="AVp-oE-Dqc"/>
                         <outlet property="spinner" destination="pid-eU-BqF" id="QzH-IF-h5d"/>
                     </connections>

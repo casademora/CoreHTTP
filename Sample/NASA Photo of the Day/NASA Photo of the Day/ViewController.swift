@@ -14,43 +14,61 @@ class ViewController: UIViewController
   @IBOutlet var progressView: UIProgressView!
   @IBOutlet var imageView: UIImageView!
   @IBOutlet var spinner: UIActivityIndicatorView!
+  @IBOutlet var button: UIButton!
 
   private lazy var host = NASAAPODHost(apiKey: "NNKOjkoul8n1CH18TWA9gwngW1s1SmjESPjNoUFo")
   
+  private func resetUI()
+  {
+    DispatchQueue.main.async {
+      self.button.isEnabled = true
+      self.progressView.isHidden = true
+      self.spinner.stopAnimating()
+    }
+  }
+  
+  private func blockUI()
+  {
+    DispatchQueue.main.async {
+      self.spinner.startAnimating()
+      self.button.isEnabled = false
+      self.progressView.isHidden = false
+    }
+  }
+  
+  private func displayImage(photo: Photo) -> Photo
+  {
+    guard let imageURL = photo.url else { return photo }
+    
+    print("Loading image at: \(imageURL)")
+    
+    let imageData = try! Data(contentsOf: imageURL)
+    print("Loaded photo of the day")
+    
+    DispatchQueue.main.async {
+      self.imageView.image = UIImage(data: imageData)
+    }
+    return photo
+  }
+  
+  private func displayError(error: HTTPResponseError) -> HTTPResponseError
+  {
+    print("Error Loading image \(error)")
+    return error
+  }
+  
   @IBAction func reloadImage(button: UIButton)
   {
-    spinner.startAnimating()
-    button.isEnabled = false
-    progressView.isHidden = false
-    
     print("Starting request for photo")
-    
+    blockUI()
     host.request(resource: astronomyPhotoOfTheDay()) { result in
       
       print("Photo request completed")
-      defer {
-        DispatchQueue.main.async {
-          button.isEnabled = true
-          self.progressView.isHidden = true
-          self.spinner.stopAnimating()
-        }
-      }
+      defer { self.resetUI() }
       
-      _ = result.map { photoData -> Photo in
-        let imageURL = photoData.url!
-        print("Loading image at: \(imageURL)")
-        
-        let imageData = try! Data(contentsOf: imageURL)
-        print("Loaded photo of the day")
-        DispatchQueue.main.async {
-          self.imageView.image = UIImage(data: imageData)
-        }
-        return photoData
-      }.mapError { error -> HTTPResponseError in
-      
-        print("Error Loading image \(error)")
-        return error
-      }
+      _ = result
+      .map(self.displayImage)
+      .mapError(self.displayError)
     }
   }
 }
