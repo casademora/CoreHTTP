@@ -87,90 +87,90 @@ public enum HTTPStatusCode: Int, HTTPStatusCodeProtocol
   }
   
   //success
-  case OK = 200
-  case Created = 201
-  case Accepted = 202
-  case NonAuthoratativeInformation = 203
-  case NoContent = 204
-  case ResetContent = 205
-  case PartialContent = 206
-  case MultiStatus = 207
-  case AlreadyReported = 208
-  case IMUsed = 226
+  case ok = 200
+  case created = 201
+  case accepted = 202
+  case nonAuthoratativeInformation = 203
+  case noContent = 204
+  case resetContent = 205
+  case partialContent = 206
+  case multiStatus = 207
+  case alreadyReported = 208
+  case imUsed = 226
   
-  fileprivate static let successStatusCodes: [HTTPStatusCode] = [.OK, .Created, .Accepted, .NonAuthoratativeInformation, .NoContent, .ResetContent, .PartialContent, .MultiStatus, .AlreadyReported, .IMUsed]
+  fileprivate static let successStatusCodes: [HTTPStatusCode] = [.ok, .created, .accepted, .nonAuthoratativeInformation, .noContent, .resetContent, .partialContent, .multiStatus, .alreadyReported, .imUsed]
   public var isSuccess: Bool
   {
     return HTTPStatusCode.successStatusCodes.contains(self)
   }
   
   //redirection
-  case MultipleChoices = 300
-  case MovedPermanently = 301
-  case Found = 302
-  case SeeOther = 303
-  case NotModified = 304
-  case UseProxy = 305
-  case SwitchProxy = 306
-  case TemporaryRedirect = 307
-  case PermanentRedirect = 308
+  case multipleChoices = 300
+  case movedPermanently = 301
+  case found = 302
+  case seeOther = 303
+  case notModified = 304
+  case useProxy = 305
+  case switchProxy = 306
+  case temporaryRedirect = 307
+  case permanentRedirect = 308
   
-  fileprivate static let redirectionStatusCodes: [HTTPStatusCode] = [.MultipleChoices, .MovedPermanently, .Found, .SeeOther, .NotModified, .UseProxy, .SwitchProxy, .TemporaryRedirect, .PermanentRedirect]
+  fileprivate static let redirectionStatusCodes: [HTTPStatusCode] = [.multipleChoices, .movedPermanently, .found, .seeOther, .notModified, .useProxy, .switchProxy, .temporaryRedirect, .permanentRedirect]
   public var isRedirection: Bool
   {
     return HTTPStatusCode.redirectionStatusCodes.contains(self)
   }
   
   //client error
-  case BadRequest = 400
-  case Unauthorized = 401
-  case PaymentRequired = 402
-  case Forbidden = 403
-  case NotFound = 404
-  case MethodNotAllowed = 405
-  case NotAcceptable = 406
-  case ProxyAuthenticationRequired = 407
-  case RequestTimeout = 408
-  case Conflict = 409
-  case Gone = 410
-  case LengthRequired = 411
-  case PreconditionFailed = 412
-  case PayloadTooLarge = 413
-  case URITooLong = 414
-  case UnsupportedMediaType = 415
-  case RangeNotStatisfiable = 416
-  case ExpectationFailed = 417
-  case ImATeapot = 418
-  case MisdirectedRequest = 421
-  case UnprocessableEntity = 422
-  case Locked = 423
-  case FailedDependency = 424
-  case UpgradeRequired = 426
-  case PreconditionRequired = 428
-  case TooManyRequests = 429
-  case RequestHeaderFieldsTooLarge = 431
-  case UnavailableForLegalReasons = 451
+  case badRequest = 400
+  case unauthorized = 401
+  case paymentRequired = 402
+  case forbidden = 403
+  case notFound = 404
+  case methodNotAllowed = 405
+  case notAcceptable = 406
+  case proxyAuthenticationRequired = 407
+  case requestTimeout = 408
+  case conflict = 409
+  case gone = 410
+  case lengthRequired = 411
+  case preconditionFailed = 412
+  case payloadTooLarge = 413
+  case uriTooLong = 414
+  case unsupportedMediaType = 415
+  case rangeNotStatisfiable = 416
+  case expectationFailed = 417
+  case imATeapot = 418
+  case misdirectedRequest = 421
+  case unprocessableEntity = 422
+  case locked = 423
+  case failedDependency = 424
+  case upgradeRequired = 426
+  case preconditionRequired = 428
+  case tooManyRequests = 429
+  case requestHeaderFieldsTooLarge = 431
+  case unavailableForLegalReasons = 451
   
-  private static let clientErrorStatusCodes: [HTTPStatusCode] = [.BadRequest, .Unauthorized, .PaymentRequired, .Forbidden, .NotFound, .MethodNotAllowed, .NotAcceptable, .ProxyAuthenticationRequired, .RequestTimeout, .Conflict, .Gone, .LengthRequired, .PreconditionFailed, .PayloadTooLarge, .URITooLong, .UnsupportedMediaType, .RangeNotStatisfiable, .ImATeapot, .MisdirectedRequest, .UnprocessableEntity, .Locked, .FailedDependency, .UpgradeRequired, .PreconditionRequired, .TooManyRequests, .RequestHeaderFieldsTooLarge, .UnavailableForLegalReasons]
+  private static let clientErrorStatusCodes: [HTTPStatusCode] = [.badRequest, .unauthorized, .paymentRequired, .forbidden, .notFound, .methodNotAllowed, .notAcceptable, .proxyAuthenticationRequired, .requestTimeout, .conflict, .gone, .lengthRequired, .preconditionFailed, .payloadTooLarge, .uriTooLong, .unsupportedMediaType, .rangeNotStatisfiable, .imATeapot, .misdirectedRequest, .unprocessableEntity, .locked, .failedDependency, .upgradeRequired, .preconditionRequired, .tooManyRequests, .requestHeaderFieldsTooLarge, .unavailableForLegalReasons]
   public var isClientError: Bool
   {
     return HTTPStatusCode.clientErrorStatusCodes.contains(self)
   }
   
   //server error
-  case InternalServerError = 500
-  case NotImplemented = 501
-  case BadGateway = 502
-  case ServiceUnavailable = 503
-  case GatewayTimeout = 504
+  case internalServerError = 500
+  case notImplemented = 501
+  case badGateway = 502
+  case serviceUnavailable = 503
+  case gatewayTimeout = 504
   case HTTPVersionNotSupported = 505
-  case VariantAlsoNegatiates = 506
-  case InsufficientStorage = 507
-  case LoopDetected = 508
-  case NotExtended = 510
-  case NetworkAuthenticationRequired = 511
+  case variantAlsoNegatiates = 506
+  case insufficientStorage = 507
+  case loopDetected = 508
+  case notExtended = 510
+  case networkAuthenticationRequired = 511
   
-  fileprivate static let serverErrorStatusCodes: [HTTPStatusCode] = [.InternalServerError, .NotImplemented, .BadGateway, .ServiceUnavailable, .GatewayTimeout, .HTTPVersionNotSupported, .VariantAlsoNegatiates, .InsufficientStorage, .LoopDetected, .NotExtended, .NetworkAuthenticationRequired]
+  fileprivate static let serverErrorStatusCodes: [HTTPStatusCode] = [.internalServerError, .notImplemented, .badGateway, .serviceUnavailable, .gatewayTimeout, .HTTPVersionNotSupported, .variantAlsoNegatiates, .insufficientStorage, .loopDetected, .notExtended, .networkAuthenticationRequired]
   public var isServerError: Bool
   {
     return HTTPStatusCode.serverErrorStatusCodes.contains(self)
@@ -181,20 +181,20 @@ enum UnofficialStatusCode: Int, HTTPStatusCodeProtocol
 {
   init(integerLiteral value: Int)
   {
-    self = UnofficialStatusCode(rawValue: value) ?? .Unknown
+    self = UnofficialStatusCode(rawValue: value) ?? .unknown
   }
   
-  case Unknown = 0
-  case Checkpoint = 103
-  case EnhaceYourCalm = 420
-  case BlockedByWindowsParentalControls = 450
-  case InvalidToken_Ersi = 498
-  case TokenRequired_Ersi = 499
+  case unknown = 0
+  case checkpoint = 103
+  case enhaceYourCalm = 420
+  case blockedByWindowsParentalControls = 450
+  case invalidToken_Ersi = 498
+  case tokenRequired_Ersi = 499
   //  case RequestHasBeenForbiddenByAntivirus = 499
-  case BandwidthLimitExceeded = 509
-  case SiteIsFrozen = 530
+  case bandwidthLimitExceeded = 509
+  case siteIsFrozen = 530
   
-  fileprivate static let allStatusCodes: [UnofficialStatusCode] = [.Checkpoint, .EnhaceYourCalm, .BlockedByWindowsParentalControls, .InvalidToken_Ersi, .TokenRequired_Ersi, .BandwidthLimitExceeded, .SiteIsFrozen]
+  fileprivate static let allStatusCodes: [UnofficialStatusCode] = [.checkpoint, .enhaceYourCalm, .blockedByWindowsParentalControls, .invalidToken_Ersi, .tokenRequired_Ersi, .bandwidthLimitExceeded, .siteIsFrozen]
 }
 
 extension HTTPStatusCode
@@ -209,15 +209,15 @@ enum InternetInformationServicesStatusCode: Int, HTTPStatusCodeProtocol
 {
   init(integerLiteral value: Int)
   {
-    self = InternetInformationServicesStatusCode(rawValue: value) ?? .Unknown
+    self = InternetInformationServicesStatusCode(rawValue: value) ?? .unknown
   }
 
-  case Unknown = 0
-  case LoginTimeout = 440
-  case RetryWith = 449
-  case Redirect = 451
+  case unknown = 0
+  case loginTimeout = 440
+  case retryWith = 449
+  case redirect = 451
   
-  fileprivate static let allStatusCodes: [InternetInformationServicesStatusCode] = [.LoginTimeout,  .RetryWith, .Redirect]
+  fileprivate static let allStatusCodes: [InternetInformationServicesStatusCode] = [.loginTimeout,  .retryWith, .redirect]
 }
 
 extension HTTPStatusCode
@@ -232,17 +232,17 @@ enum NGinxStatusCode: Int, HTTPStatusCodeProtocol
 {
   init(integerLiteral value: Int)
   {
-    self = NGinxStatusCode(rawValue: value) ?? .Unknown
+    self = NGinxStatusCode(rawValue: value) ?? .unknown
   }
 
-  case Unknown = 0
-  case NoResponse = 444
+  case unknown = 0
+  case noResponse = 444
   case SSLCertificateError = 495
   case SSLCertificateRequired = 496
   case HTTPRequestSentToHTTPSPort = 497
-  case ClientClosedRequest = 499
+  case clientClosedRequest = 499
   
-  fileprivate static let allStatusCodes: [NGinxStatusCode] = [.NoResponse, .SSLCertificateError, .SSLCertificateRequired, .HTTPRequestSentToHTTPSPort, .ClientClosedRequest]
+  fileprivate static let allStatusCodes: [NGinxStatusCode] = [.noResponse, .SSLCertificateError, .SSLCertificateRequired, .HTTPRequestSentToHTTPSPort, .clientClosedRequest]
 }
 
 extension HTTPStatusCode
@@ -257,19 +257,19 @@ enum CloudFlareStatusCode: Int, HTTPStatusCodeProtocol
 {
   init(integerLiteral value: Int)
   {
-    self = CloudFlareStatusCode(rawValue: value) ?? .Unknown
+    self = CloudFlareStatusCode(rawValue: value) ?? .unknown
   }
 
-  case Unknown = 0
-  case UnknownError = 520
-  case WebServerIsDown = 521
-  case ConnectionTimedOut = 522
-  case OriginIsUnreachable = 523
-  case ATimeoutOccured = 524
+  case unknown = 0
+  case unknownError = 520
+  case webServerIsDown = 521
+  case connectionTimedOut = 522
+  case originIsUnreachable = 523
+  case aTimeoutOccured = 524
   case SSLHandshakeFailed = 525
-  case InvalidSSLCertificate = 526
+  case invalidSSLCertificate = 526
   
-  fileprivate static let allStatusCodes: [CloudFlareStatusCode] = [.UnknownError, .WebServerIsDown, .ConnectionTimedOut, .OriginIsUnreachable, .ATimeoutOccured, .SSLHandshakeFailed, .InvalidSSLCertificate]
+  fileprivate static let allStatusCodes: [CloudFlareStatusCode] = [.unknownError, .webServerIsDown, .connectionTimedOut, .originIsUnreachable, .aTimeoutOccured, .SSLHandshakeFailed, .invalidSSLCertificate]
 }
 
 extension HTTPStatusCode
