@@ -32,7 +32,7 @@ class ViewController: UIViewController
     DispatchQueue.main.async {
       self.spinner.startAnimating()
       self.button.isEnabled = false
-      self.progressView.isHidden = false
+      self.progressView?.isHidden = false
     }
   }
   
@@ -53,6 +53,10 @@ class ViewController: UIViewController
   
   private func displayError(error: HTTPResponseError) -> HTTPResponseError
   {
+    let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+    alert.addAction(UIAlertAction(title: "Darn!", style: .default, handler: nil))
+    present(alert, animated: UIView.areAnimationsEnabled, completion: nil)
+      
     print("Error Loading image \(error)")
     return error
   }
@@ -61,7 +65,8 @@ class ViewController: UIViewController
   {
     print("Starting request for photo")
     blockUI()
-    host.request(resource: astronomyPhotoOfTheDay()) { result in
+    
+    let response = host.request(resource: astronomyPhotoOfTheDay()) { result in
       
       print("Photo request completed")
       defer { self.resetUI() }
@@ -70,6 +75,17 @@ class ViewController: UIViewController
       .map(self.displayImage)
       .mapError(self.displayError)
     }
+    progressView.observedProgress = response.progress
+    
+    //TODO: Make this API happen
+//    host.request(resource: astronomyPhotoOfTheDay())
+//      .download { photoData -> URL in $0.url }
+//      .progress { value in print("Download ") }
+//      .trackProgress { self.progressView.observedProgress = $0 }
+//      .then(self.displayImage)
+//      .finally(resetUI)
   }
+  
 }
+
 

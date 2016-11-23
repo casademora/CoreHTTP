@@ -24,6 +24,9 @@
 		C7A82E081DC1F039007B1270 /* Argo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7A82DFF1DC1ED21007B1270 /* Argo.framework */; };
 		C7A82E091DC1F039007B1270 /* Curry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7A82E001DC1ED21007B1270 /* Curry.framework */; };
 		C7A82E0A1DC1F039007B1270 /* Runes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7A82E011DC1ED21007B1270 /* Runes.framework */; };
+		C7E14CCC1DE5459D0088AB27 /* then.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7E14CCB1DE5459D0088AB27 /* then.framework */; };
+		C7E14CCD1DE545A10088AB27 /* then.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7E14CCB1DE5459D0088AB27 /* then.framework */; };
+		C7E14CCE1DE545A10088AB27 /* then.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C7E14CCB1DE5459D0088AB27 /* then.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +65,7 @@
 				C7A82E031DC1ED21007B1270 /* Argo.framework in CopyFiles */,
 				C7A82E041DC1ED21007B1270 /* Curry.framework in CopyFiles */,
 				C7A82E051DC1ED21007B1270 /* Runes.framework in CopyFiles */,
+				C7E14CCE1DE545A10088AB27 /* then.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,6 +86,7 @@
 		C7A82DFF1DC1ED21007B1270 /* Argo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Argo.framework; path = ../../Carthage/Build/iOS/Argo.framework; sourceTree = "<group>"; };
 		C7A82E001DC1ED21007B1270 /* Curry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Curry.framework; path = ../../Carthage/Build/iOS/Curry.framework; sourceTree = "<group>"; };
 		C7A82E011DC1ED21007B1270 /* Runes.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Runes.framework; path = ../../Carthage/Build/iOS/Runes.framework; sourceTree = "<group>"; };
+		C7E14CCB1DE5459D0088AB27 /* then.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = then.framework; path = ../../Carthage/Build/iOS/then.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,9 +96,11 @@
 			files = (
 				C7A82DFB1DC1EC2F007B1270 /* CoreHTTP.framework in Frameworks */,
 				C7A82E071DC1F039007B1270 /* Result.framework in Frameworks */,
+				C7E14CCD1DE545A10088AB27 /* then.framework in Frameworks */,
 				C7A82E081DC1F039007B1270 /* Argo.framework in Frameworks */,
 				C7A82E091DC1F039007B1270 /* Curry.framework in Frameworks */,
 				C7A82E0A1DC1F039007B1270 /* Runes.framework in Frameworks */,
+				C7E14CCC1DE5459D0088AB27 /* then.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,6 +152,7 @@
 		C7A82E061DC1ED27007B1270 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C7E14CCB1DE5459D0088AB27 /* then.framework */,
 				C7A82DFE1DC1ED21007B1270 /* Result.framework */,
 				C7A82DFF1DC1ED21007B1270 /* Argo.framework */,
 				C7A82E001DC1ED21007B1270 /* Curry.framework */,

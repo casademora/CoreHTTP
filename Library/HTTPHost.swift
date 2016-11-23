@@ -13,7 +13,7 @@ public typealias AuthenticateURLRequestFunction = (_ request: URLRequest) -> (UR
 public typealias PreprocessRequestFunction = (URLRequest) -> URLRequest
 public typealias GenerateAuthenticationCredentialsFunction = (Void) -> (HTTPAuthenticationType)
 
-public protocol HTTPHostProtocol: Hashable
+public protocol HTTPHostProtocol: Hashable, HTTPResourceRequestable
 {
   var baseURLString: String { get }
   var baseURL: URL { get }
@@ -22,17 +22,6 @@ public protocol HTTPHostProtocol: Hashable
 
   var validate: ResponseValidationFunction { get }
   var authentication: GenerateAuthenticationCredentialsFunction { get }
-
-  func canRequestResource<R: HTTPResourceProtocol & HostedResource>(resource: R) -> Bool
-  
-  @discardableResult func request<R: HostedResource & HTTPResourceProtocol>
-  (
-    resource: R,
-    cacheWith cachePolicy: URLRequest.CachePolicy,
-    timeoutAfter requestTimeout: TimeInterval,
-    completion: @escaping (Result<R.ResourceType, R.ErrorType>) -> Void
-  ) -> URLSessionTask?
-  where R.ErrorType == HTTPResponseError
 }
 
 open class HTTPHost: HTTPHostProtocol
@@ -41,12 +30,19 @@ open class HTTPHost: HTTPHostProtocol
   
   public let preprocessRequest: PreprocessRequestFunction?
   public let validate: ResponseValidationFunction
-  public let authentication: GenerateAuthenticationCredentialsFunction
+  public var authentication: GenerateAuthenticationCredentialsFunction
+  {
+    didSet
+    {
+      rebuildSession()
+    }
+  }
+  public private(set) lazy var session: URLSession = self.buildSession()
   
   private let configuration: URLSessionConfiguration
   
   public init(baseURLString: String,
-              configuration: URLSessionConfiguration,
+              configuration: URLSessionConfiguration = .default,
               preprocessRequests: PreprocessRequestFunction? = nil,
               validate: @escaping ResponseValidationFunction = defaultValidation,
               authentication: @escaping GenerateAuthenticationCredentialsFunction = defaultAuthentication)
@@ -58,26 +54,42 @@ open class HTTPHost: HTTPHostProtocol
     self.authentication = authentication
   }
   
-  open func applyAdditionalConfiguration(_ configuration: URLSessionConfiguration)
+  func setAuthentication(type: HTTPAuthenticationType)
   {
-    configuration.httpAdditionalHeaders =
-      [
-        "User-Agent": buildUserAgent()
-      ]
+    authentication = { type }
   }
   
-  public private(set) lazy var session: URLSession = {
+  private func rebuildSession()
+  {
+    session = buildSession()
+  }
+  
+  private func buildSession() -> URLSession
+  {
     let configuration = self.configuration
     self.applyAdditionalConfiguration(configuration)
     return URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
-  }()
+  }
+  
+  open func applyAdditionalConfiguration(_ configuration: URLSessionConfiguration)
+  {
+    var addtionalHeaders: [String: Any] = [:]
+    addtionalHeaders["User-Agent"] = buildUserAgent()
+    
+    let authType = authentication()
+    if authType.isStaticHeaderAuthentication
+    {
+      addtionalHeaders["Authorization"] = authType.authenticationHeaderValue
+    }
+    configuration.httpAdditionalHeaders = addtionalHeaders
+  }
 }
 
 extension HTTPHost: Hashable
 {
   public var baseURL: URL
   {
-    return URL(string: baseURLString)!
+    return URL(string: baseURLString) ?? URL(fileURLWithPath: "/")
   }
   
   public var hashValue: Int

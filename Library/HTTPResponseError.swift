@@ -10,15 +10,15 @@ public protocol HTTPResourceError: Error
 {
 }
 
-//public enum HTTPRequestError: HTTPResourceError
-//{
-//  case unknown
-//  case hostForRequestNotFound
-//  case hostNotSpecified
-//  case hostBaseURLInvalid
-//  
-//  case unableToBuildRequest(path: String, queryParameters: [String: String])
-//}
+public enum HTTPRequestError: HTTPResourceError
+{
+  case unknown
+  case hostForRequestNotFound
+  case hostNotSpecified
+  case hostBaseURLInvalid
+  
+  case unableToBuildRequest(path: String, queryParameters: [String: String])
+}
 
 public enum HTTPResponseError: HTTPResourceError
 {

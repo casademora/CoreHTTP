@@ -11,8 +11,8 @@ import Result
 let defaultCachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
 let defaultTimeout: TimeInterval = 30.seconds
 
-private func buildRequestFor<H, R>(
-    resource: R,
+func buildRequest<H, R>(
+    for resource: R,
     host: H,
     cachePolicy: URLRequest.CachePolicy,
     requestTimeout: TimeInterval)
@@ -29,9 +29,8 @@ private func buildRequestFor<H, R>(
 
   components.queryItems = convertToQueryItems(source: resource.queryParameters)
   
-  guard let requestURL = components.url else {
-    return Result(error: .unableToBuildRequest(path: resource.path, queryParameters: resource.queryParameters))
-  }
+  guard let requestURL = components.url
+    else { return Result(error: .unableToBuildRequest(path: resource.path, queryParameters: resource.queryParameters)) }
   
   var request = URLRequest(url: requestURL, cachePolicy: cachePolicy, timeoutInterval: requestTimeout)
   request.httpMethod = resource.method.value
@@ -39,7 +38,8 @@ private func buildRequestFor<H, R>(
   return Result(request)
 }
 
-@discardableResult public func request<R: HostedResource & HTTPResourceProtocol>
+
+@discardableResult public func request<R>
   (
     resource: R,
     from host: HTTPHost? = nil,
@@ -47,61 +47,23 @@ private func buildRequestFor<H, R>(
     timeoutAfter requestTimeout: TimeInterval = defaultTimeout,
     completion: @escaping (Result<R.ResourceType, R.ErrorType>) -> Void
   )
-  -> URLSessionTask?
-  where R.ErrorType == HTTPResponseError
+  -> HTTPResponse<R>
+  where R: HTTPResourceProtocol & HostedResource,
+        R.ErrorType == HTTPResponseError
 {
-  guard let hostToQuery = host ?? hostRegistry.hostFor(resource) else {
-    completion(Result(error: .hostNotSpecified))
-    return nil
+  guard let hostToQuery = host ?? defaultHostRegistry.hostFor(resource) else {
+    let response =  HTTPResponse<R>(result: Result(error: .hostNotSpecified))
+    completion(response.result)
+    return response
   }
 
   return hostToQuery.request(resource: resource, cacheWith: cachePolicy, timeoutAfter: requestTimeout, completion: completion)
 }
 
-extension HTTPHostProtocol
-{
-  public func canRequestResource<R: HTTPResourceProtocol & HostedResource>(resource: R) -> Bool
-  {
-    let resourceIsCompatible: Bool = type(of: resource.hostType) == type(of: self)
-    return resourceIsCompatible
-  }
-  
-  @discardableResult
-  public func request<R: HTTPResourceProtocol & HostedResource>
-  (
-    resource: R,
-    cacheWith cachePolicy: URLRequest.CachePolicy = defaultCachePolicy,
-    timeoutAfter requestTimeout: TimeInterval = defaultTimeout,
-    completion: @escaping (Result<R.ResourceType, R.ErrorType>) -> Void
-  ) -> URLSessionTask?
-  where R.ErrorType == HTTPResponseError
-  {
-    let request = buildRequestFor(resource: resource, host: self, cachePolicy: cachePolicy, requestTimeout: requestTimeout)
-
-    let sessionTask = request
-      .map (authentication().authenticate)
-      .map { request -> URLSessionDataTask in
-        
-        let completionHandler = completionHandlerForRequest(resource: resource, validate: validate, completion: completion)
-        return self.session.dataTask(with: request, completionHandler: completionHandler)
-        
-      }
-      .map { task -> URLSessionDataTask in
-        
-        log(level: .Debug, message: "Sending Request: \(task.currentRequest?.url)")
-        task.resume()
-        return task
-        
-      }
-    return sessionTask.value
-  }
-  
-//  func download(resource)
-}
 
 /// Utilities
 
-fileprivate func convertToQueryItems(source: [String: String]) -> [URLQueryItem]
+func convertToQueryItems(source: [String: String]) -> [URLQueryItem]
 {
   guard !source.isEmpty else { return [] }
   

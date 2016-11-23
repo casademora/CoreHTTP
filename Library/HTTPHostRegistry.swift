@@ -6,7 +6,7 @@
 //  Copyright © 2016 Magical Panda Software. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct HostRegistry
 {
@@ -31,20 +31,28 @@ struct HostRegistry
   }
 }
 
-private(set) var hostRegistry = HostRegistry()
+private(set) var defaultHostRegistry = HostRegistry()
 
 public func register<H: HTTPHost>(host: H)
 {
-  hostRegistry.register(host)
+  defaultHostRegistry.register(host)
 }
 
 public func unregister<H: HTTPHost>(host: H)
 {
-  hostRegistry.unregister(host)
+  defaultHostRegistry.unregister(host)
 }
 
 public protocol HostedResource
 {
   var hostType: AnyClass { get }
+}
+
+extension UIApplication
+{
+  var hostRegistry: HostRegistry
+  {
+    return defaultHostRegistry
+  }
 }
 

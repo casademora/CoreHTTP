@@ -29,20 +29,30 @@ public enum HTTPAuthenticationType
     }
   }
   
+  var isStaticHeaderAuthentication: Bool
+  {
+    switch self
+    {
+    case .basic, .oauth: return true
+    default: return false
+    }
+  }
+  
+  private func authentication() -> (URLRequest) -> URLRequest
+  {
+    switch self
+    {
+    case .queryParameters:
+      return authenticateQuery
+    case .basic, .oauth:
+      return authenticateHeader
+    case .none:
+      return noAuthentication
+    }
+  }
+  
   func authenticate(request: URLRequest) -> URLRequest
   {
-    func authentication() -> (URLRequest) -> URLRequest
-    {
-      switch self
-      {
-      case .queryParameters:
-        return authenticateQuery
-      case .basic(_), .oauth(_):
-        return authenticateHeader
-      case .none:
-        return noAuthentication
-      }
-    }
     let function = authentication()
     return function(request)
   }
