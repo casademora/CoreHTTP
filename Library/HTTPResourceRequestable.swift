@@ -7,70 +7,57 @@
 //
 
 import Result
+import Runes
 
 public protocol HTTPResourceRequestable
 {
   func canRequestResource<R>(resource: R) -> Bool
     where R: HTTPResourceProtocol & HostedResource
   
-  @discardableResult func request<R>
+  @discardableResult func request<ResourceType>
     (
-    resource: R,
-    cacheWith cachePolicy: URLRequest.CachePolicy,
-    timeoutAfter requestTimeout: TimeInterval,
-    completion: @escaping (Result<R.ResourceType, R.ErrorType>) -> Void
-    ) -> HTTPResponse<R>
-  where R: HostedResource & HTTPResourceProtocol,
-        R.ErrorType == HTTPResponseError
+      resource: ResourceType,
+      cacheWith cachePolicy: URLRequest.CachePolicy,
+      timeoutAfter requestTimeout: TimeInterval
+    )
+    -> HTTPResponse<ResourceType.RequestedType, HTTPRequestError>
+  where ResourceType: HostedResource & HTTPResourceProtocol
+  
+  //func download()
+  //func upload()
 }
 
 
-extension HTTPResourceRequestable where Self: HTTPHostProtocol
+extension HTTPResourceRequestable where Self: HTTPHost
 {
   public func canRequestResource<R>(resource: R) -> Bool
     where R: HTTPResourceProtocol & HostedResource
   {
-    let resourceIsCompatible: Bool = type(of: resource.hostType) == type(of: self)
-    return resourceIsCompatible
+    return type(of: resource.hostType) == type(of: self)
   }
   
-  private func buildDataTask<R>(for resource: R, with completion: @escaping (Result<R.ResourceType, R.ErrorType>) -> Void) -> (URLRequest) -> URLSessionTask
-    where R: HTTPResourceProtocol,
-          R.ErrorType == HTTPResponseError
+  private func dataTask(for request: URLRequest) -> URLSessionTask
   {
-    let responseValidation = validate
-    let session = self.session
-    return { request in
-      let completionHandler = completionHandlerForRequest(resource: resource, validate: responseValidation, completion: completion)
-      return session.dataTask(with: request, completionHandler: completionHandler)
-    }
-  }
-  
-  private func beginTask(task: URLSessionTask) -> URLSessionTask
-  {
-    log(level: .Debug, message: "Sending Request: \(task.currentRequest?.url)")
-    task.resume()
-    return task
+    return session.dataTask(with: request)
   }
   
   @discardableResult
-  public func request<R>
+  public func request<ResourceType>
     (
-    resource: R,
-    cacheWith cachePolicy: URLRequest.CachePolicy = defaultCachePolicy,
-    timeoutAfter requestTimeout: TimeInterval = defaultTimeout,
-    completion: @escaping (Result<R.ResourceType, R.ErrorType>) -> Void
-    ) -> HTTPResponse<R>
-  where R: HTTPResourceProtocol & HostedResource,
-    R.ErrorType == HTTPResponseError
+      resource: ResourceType,
+      cacheWith cachePolicy: URLRequest.CachePolicy = defaultCachePolicy,
+      timeoutAfter requestTimeout: TimeInterval = defaultTimeout
+    ) -> HTTPResponse<ResourceType.RequestedType, HTTPRequestError>
+  where ResourceType: HTTPResourceProtocol & HostedResource
   {
-    let request = buildRequest(for: resource, host: self, cachePolicy: cachePolicy, requestTimeout: requestTimeout)
-    
-    let sessionTask = request
+    let task = resource
+      .request(for: self, cachePolicy: cachePolicy, timeoutAfter: requestTimeout)
       .map (authentication().authenticate)
-      .map (buildDataTask(for: resource, with: completion))
-      .map (beginTask)
+      .map (dataTask)
+      .value
     
-    return HTTPResponse(task: sessionTask.value!)
+    let response: HTTPResponse<ResourceType.RequestedType, HTTPRequestError> = HTTPResponse(task: task)
+    sessionDelegate.register(pendingResponse: AnyHTTPResponse(response))
+    return response
   }
 }

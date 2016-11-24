@@ -36,9 +36,9 @@ class ViewController: UIViewController
     }
   }
   
-  private func displayImage(photo: Photo) -> Photo
+  private func displayImage(photo: Photo)
   {
-    guard let imageURL = photo.url else { return photo }
+    guard let imageURL = photo.url else { return }
     
     print("Loading image at: \(imageURL)")
     
@@ -48,17 +48,15 @@ class ViewController: UIViewController
     DispatchQueue.main.async {
       self.imageView.image = UIImage(data: imageData)
     }
-    return photo
   }
   
-  private func displayError(error: HTTPResponseError) -> HTTPResponseError
+  private func displayError(error: HTTPResponseError)
   {
     let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
     alert.addAction(UIAlertAction(title: "Darn!", style: .default, handler: nil))
     present(alert, animated: UIView.areAnimationsEnabled, completion: nil)
       
     print("Error Loading image \(error)")
-    return error
   }
   
   @IBAction func reloadImage(button: UIButton)
@@ -66,24 +64,13 @@ class ViewController: UIViewController
     print("Starting request for photo")
     blockUI()
     
-    let response = host.request(resource: astronomyPhotoOfTheDay()) { result in
-      
-      print("Photo request completed")
-      defer { self.resetUI() }
-      
-      _ = result
-      .map(self.displayImage)
-      .mapError(self.displayError)
-    }
-    progressView.observedProgress = response.progress
-    
-    //TODO: Make this API happen
-//    host.request(resource: astronomyPhotoOfTheDay())
-//      .download { photoData -> URL in $0.url }
-//      .progress { value in print("Download ") }
-//      .trackProgress { self.progressView.observedProgress = $0 }
-//      .then(self.displayImage)
-//      .finally(resetUI)
+    host
+      .request(resource: astronomyPhotoOfTheDay())
+      .progress { (value) in print("Progress: \(value)") }
+      .observe { self.progressView.observedProgress = $0 }
+      .download { $0.url! }
+      .complete { self.displayImage(photo: $0) }
+      .error(displayError)
   }
   
 }

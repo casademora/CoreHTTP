@@ -22,14 +22,15 @@
 		C7C669351D223207007ECF77 /* ArgoDecoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C6692C1D223207007ECF77 /* ArgoDecoding.swift */; };
 		C7C669361D223207007ECF77 /* ArgoDecodingUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C6692D1D223207007ECF77 /* ArgoDecodingUtility.swift */; };
 		C7C669371D223207007ECF77 /* ArgoParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7C6692E1D223207007ECF77 /* ArgoParsing.swift */; };
-		C7C6693F1D223374007ECF77 /* Argo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7C6693C1D223374007ECF77 /* Argo.framework */; };
-		C7C669401D223374007ECF77 /* Curry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7C6693D1D223374007ECF77 /* Curry.framework */; };
+		C7C6693F1D223374007ECF77 /* Argo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7C6693C1D223374007ECF77 /* Argo.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		C7C669401D223374007ECF77 /* Curry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7C6693D1D223374007ECF77 /* Curry.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C7C669411D223374007ECF77 /* Runes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7C6693E1D223374007ECF77 /* Runes.framework */; };
 		C7C669431D22344B007ECF77 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7C669421D22344B007ECF77 /* Result.framework */; };
 		C7DB9B451DC3066B0092EFE6 /* JSONSerialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7DB9B441DC3066B0092EFE6 /* JSONSerialization.swift */; };
 		C7E14CBB1DDEEC0B0088AB27 /* HTTPAuthenticationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E14CBA1DDEEC0B0088AB27 /* HTTPAuthenticationType.swift */; };
-		C7E14CBD1DE2A7F30088AB27 /* HTTPResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E14CBC1DE2A7F30088AB27 /* HTTPResult.swift */; };
+		C7E14CC61DE542240088AB27 /* then.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7E14CC51DE542240088AB27 /* then.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C7E14CD11DE5541C0088AB27 /* HTTPResourceRequestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E14CD01DE5541C0088AB27 /* HTTPResourceRequestable.swift */; };
+		C7E14CD41DE579B40088AB27 /* HTTPHostSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E14CD31DE579B40088AB27 /* HTTPHostSessionDelegate.swift */; };
 		C7E1B3B51D26402900C22DC2 /* Bundle+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E1B3B41D26402900C22DC2 /* Bundle+Additions.swift */; };
 		C7E1B3B71D2640B200C22DC2 /* Support.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E1B3B61D2640B200C22DC2 /* Support.swift */; };
 /* End PBXBuildFile section */
@@ -72,8 +73,9 @@
 		C7C669421D22344B007ECF77 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = SOURCE_ROOT; };
 		C7DB9B441DC3066B0092EFE6 /* JSONSerialization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONSerialization.swift; sourceTree = "<group>"; };
 		C7E14CBA1DDEEC0B0088AB27 /* HTTPAuthenticationType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPAuthenticationType.swift; sourceTree = "<group>"; };
-		C7E14CBC1DE2A7F30088AB27 /* HTTPResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPResult.swift; sourceTree = "<group>"; };
+		C7E14CC51DE542240088AB27 /* then.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = then.framework; path = Carthage/Build/iOS/then.framework; sourceTree = SOURCE_ROOT; };
 		C7E14CD01DE5541C0088AB27 /* HTTPResourceRequestable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPResourceRequestable.swift; sourceTree = "<group>"; };
+		C7E14CD31DE579B40088AB27 /* HTTPHostSessionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPHostSessionDelegate.swift; sourceTree = "<group>"; };
 		C7E1B3B41D26402900C22DC2 /* Bundle+Additions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Bundle+Additions.swift"; sourceTree = "<group>"; };
 		C7E1B3B61D2640B200C22DC2 /* Support.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Support.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -91,10 +93,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C7C669401D223374007ECF77 /* Curry.framework in Frameworks */,
 				C7C669411D223374007ECF77 /* Runes.framework in Frameworks */,
-				C7C6693F1D223374007ECF77 /* Argo.framework in Frameworks */,
 				C7C669431D22344B007ECF77 /* Result.framework in Frameworks */,
+				C7C669401D223374007ECF77 /* Curry.framework in Frameworks */,
+				C7C6693F1D223374007ECF77 /* Argo.framework in Frameworks */,
+				C7E14CC61DE542240088AB27 /* then.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,13 +145,13 @@
 			children = (
 				C7C669381D22320D007ECF77 /* Support */,
 				C7C669261D223207007ECF77 /* HTTPHost.swift */,
-				C7E14CBA1DDEEC0B0088AB27 /* HTTPAuthenticationType.swift */,
-				C7C6692A1D223207007ECF77 /* HTTPMethod.swift */,
 				C7C669271D223207007ECF77 /* HTTPResource.swift */,
 				C7E14CD01DE5541C0088AB27 /* HTTPResourceRequestable.swift */,
+				C7E14CD31DE579B40088AB27 /* HTTPHostSessionDelegate.swift */,
+				C7E14CBA1DDEEC0B0088AB27 /* HTTPAuthenticationType.swift */,
+				C7C6692A1D223207007ECF77 /* HTTPMethod.swift */,
 				C7C669281D223207007ECF77 /* HTTPRequest.swift */,
 				C759F9211D2263D60081C915 /* HTTPResponse.swift */,
-				C7E14CBC1DE2A7F30088AB27 /* HTTPResult.swift */,
 				C7C669291D223207007ECF77 /* HTTPResponseError.swift */,
 				C759F9231D226C150081C915 /* HTTPStatusCodes.swift */,
 				C7C6692B1D223207007ECF77 /* HTTPHostRegistry.swift */,
@@ -176,6 +179,7 @@
 		C7C669391D22325E007ECF77 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C7E14CC51DE542240088AB27 /* then.framework */,
 				C7C669421D22344B007ECF77 /* Result.framework */,
 				C7C6693C1D223374007ECF77 /* Argo.framework */,
 				C7C6693D1D223374007ECF77 /* Curry.framework */,
@@ -322,7 +326,6 @@
 				C71A7F791D87A4BD00F2C879 /* Logging.swift in Sources */,
 				C759F9221D2263D60081C915 /* HTTPResponse.swift in Sources */,
 				C7C669361D223207007ECF77 /* ArgoDecodingUtility.swift in Sources */,
-				C7E14CBD1DE2A7F30088AB27 /* HTTPResult.swift in Sources */,
 				C7E14CBB1DDEEC0B0088AB27 /* HTTPAuthenticationType.swift in Sources */,
 				C7C669321D223207007ECF77 /* HTTPResponseError.swift in Sources */,
 				C7C669301D223207007ECF77 /* HTTPResource.swift in Sources */,
@@ -332,6 +335,7 @@
 				C7E1B3B71D2640B200C22DC2 /* Support.swift in Sources */,
 				C759F9241D226C150081C915 /* HTTPStatusCodes.swift in Sources */,
 				C71A7F7B1D87A4E200F2C879 /* Int+Additions.swift in Sources */,
+				C7E14CD41DE579B40088AB27 /* HTTPHostSessionDelegate.swift in Sources */,
 				C7C669311D223207007ECF77 /* HTTPRequest.swift in Sources */,
 				C7C669351D223207007ECF77 /* ArgoDecoding.swift in Sources */,
 			);

@@ -11,53 +11,47 @@ import Result
 let defaultCachePolicy: URLRequest.CachePolicy = .useProtocolCachePolicy
 let defaultTimeout: TimeInterval = 30.seconds
 
-func buildRequest<H, R>(
-    for resource: R,
-    host: H,
-    cachePolicy: URLRequest.CachePolicy,
-    requestTimeout: TimeInterval)
-  -> Result<URLRequest, R.ErrorType>
-    where
-      H: HTTPHostProtocol,
-      R: HTTPResourceProtocol,
-      R.ErrorType == HTTPResponseError
+extension HTTPResourceProtocol
 {
-  let path = resource.path
-  let requestedURL = host.baseURL.appendingPathComponent(path)
-  guard var components = URLComponents(url: requestedURL, resolvingAgainstBaseURL: false)
-    else { return Result(error: .hostBaseURLInvalid) }
-
-  components.queryItems = convertToQueryItems(source: resource.queryParameters)
-  
-  guard let requestURL = components.url
-    else { return Result(error: .unableToBuildRequest(path: resource.path, queryParameters: resource.queryParameters)) }
-  
-  var request = URLRequest(url: requestURL, cachePolicy: cachePolicy, timeoutInterval: requestTimeout)
-  request.httpMethod = resource.method.value
-
-  return Result(request)
+  func request<HostType>
+  (
+    for host: HostType,
+    cachePolicy: URLRequest.CachePolicy,
+    timeoutAfter requestTimeout: TimeInterval
+  ) -> Result<URLRequest, HTTPRequestError>
+  where HostType: HTTPHostProtocol
+  {
+    let requestedURL = host.baseURL.appendingPathComponent(path)
+    guard var components = URLComponents(url: requestedURL, resolvingAgainstBaseURL: false)
+      else { return Result(error: .hostBaseURLInvalid) }
+    
+    components.queryItems = convertToQueryItems(source: queryParameters)
+    
+    guard let requestURL = components.url
+      else { return Result(error: .unableToBuildRequest(path: path, queryParameters: queryParameters)) }
+    
+    var request = URLRequest(url: requestURL, cachePolicy: cachePolicy, timeoutInterval: requestTimeout)
+    request.httpMethod = method.description
+    
+    return Result(request)
+  }
 }
 
 
-@discardableResult public func request<R>
+@discardableResult public func request<ResourceType>
   (
-    resource: R,
+    resource: ResourceType,
     from host: HTTPHost? = nil,
     cacheWith cachePolicy: URLRequest.CachePolicy = defaultCachePolicy,
-    timeoutAfter requestTimeout: TimeInterval = defaultTimeout,
-    completion: @escaping (Result<R.ResourceType, R.ErrorType>) -> Void
+    timeoutAfter requestTimeout: TimeInterval = defaultTimeout
   )
-  -> HTTPResponse<R>
-  where R: HTTPResourceProtocol & HostedResource,
-        R.ErrorType == HTTPResponseError
+  -> HTTPResponse<ResourceType.RequestedType, HTTPRequestError>
+  where ResourceType: HTTPResourceProtocol & HostedResource
 {
-  guard let hostToQuery = host ?? defaultHostRegistry.hostFor(resource) else {
-    let response =  HTTPResponse<R>(result: Result(error: .hostNotSpecified))
-    completion(response.result)
-    return response
-  }
+  guard let hostToQuery = host ?? defaultHostRegistry.hostFor(resource)
+    else { return HTTPResponse(error: .hostForRequestNotFound) }
 
-  return hostToQuery.request(resource: resource, cacheWith: cachePolicy, timeoutAfter: requestTimeout, completion: completion)
+  return hostToQuery.request(resource: resource, cacheWith: cachePolicy, timeoutAfter: requestTimeout)
 }
 
 

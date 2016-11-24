@@ -11,25 +11,22 @@ import Runes
 import Result
 import Foundation
 
-public typealias ResourceParseResult<ResourceType> = Result<ResourceType, HTTPResponseError>
-public typealias ResourceParseFunction<ResourceType> = (Data) -> ResourceParseResult<ResourceType>
+public typealias ResourceParseResult<RequestedType> = Result<RequestedType, HTTPResponseError>
+public typealias ResourceParseFunction<RequestedType> = (Data) -> ResourceParseResult<RequestedType>
 
 public protocol HTTPResourceProtocol
 {
-  associatedtype ResourceType
-  associatedtype ErrorType: HTTPResourceError
+  associatedtype RequestedType
   associatedtype HTTPMethod: HTTPMethodProtocol
   
   var path: String { get }
   var method: HTTPMethod { get }
   var queryParameters: [String: String] { get }
-  var parse: (Data) -> ResourceParseResult<ResourceType> { get }
+  var parse: (Data) -> ResourceParseResult<RequestedType> { get }
 }
 
 open class HTTPResource<RequestedType, HTTPMethod: HTTPMethodProtocol>: HTTPResourceProtocol
 {
-  public typealias ErrorType = HTTPResponseError
-  
   public let path: String
   public let method: HTTPMethod
   public let queryParameters: [String : String]

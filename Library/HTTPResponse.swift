@@ -8,86 +8,171 @@
 
 import Result
 
-func validateResponse(_ error: Error?) -> (HTTPURLResponse) -> Result<HTTPURLResponse, HTTPResponseError>
+public protocol HTTPResponseProtocol: Hashable
 {
-  return { httpResponse in
-    
-    log(level: .Debug, message: "Received Response: \(httpResponse.statusCode) - \(httpResponse.url) - \(httpResponse.allHeaderFields)")
-  
-    func transform(error: Error) -> Result<HTTPURLResponse, HTTPResponseError>
-    {
-      return Result(error: error._code == NSURLErrorCancelled ? .cancelled : .responseFailure(httpResponse))
-    }
-    
-    return error.flatMap(transform) ?? Result(httpResponse)
-  }
-}
-
-func completionHandlerForRequest<R: HTTPResourceProtocol>
-  (
-    resource: R,
-    validate: @escaping ResponseValidationFunction,
-    completion: @escaping (Result<R.ResourceType, R.ErrorType>) -> Void
-  )
-    -> (Data?, URLResponse?, Error?) -> Void
-    where R.ErrorType == HTTPResponseError
-{
-  return { (data, response, error) in
-  
-    let responseValue = Result(response as? HTTPURLResponse, failWith: .invalidResponseType)
-      >>- validateResponse(error)
-      >>- validate(data)
-      >>- resource.parse
-
-    completion(responseValue)
-  }
-}
-
-func completionHandlerForRequest<R: HTTPResourceProtocol>
-  (
-    resource: R,
-    validate: @escaping ResponseValidationFunction,
-    completion: @escaping (Result<R.ResourceType, R.ErrorType>) -> Void
-  ) -> (Data?, URLResponse?, Error?) -> Void
-  where R.ErrorType == HTTPRequestError
-{
-  return { (data, response, error) in
-    completion(.failure(.unknown))
-  }
-}
-
-public protocol HTTPProgressMonitorable
-{
-  var progress: Progress { get }
-}
-
-public protocol HTTPResponseProtocol
-{
-  associatedtype ResponseType
+  associatedtype ValueType
   associatedtype ErrorType = HTTPResponseError
+  
+  func progress(_ handler: @escaping (Float) -> Void) -> Self
+  func observe(_ observer: @escaping (Progress) -> Void) -> Self
+  func download(_ transform: @escaping (ValueType) -> URL) -> Self
+  func complete(_ handler: @escaping (ValueType) -> Void) -> Self
+  func error(_ handler: @escaping (ErrorType) -> Void) -> Self
 }
 
-public class HTTPResponse<R: HTTPResourceProtocol>: HTTPResponseProtocol
+
+//func validateResponse(_ error: Error?) -> (HTTPURLResponse) -> Result<HTTPURLResponse, HTTPResponseError>
+//{
+//  return { httpResponse in
+//    
+//    log(level: .Debug, message: "Received Response: \(httpResponse.statusCode) - \(httpResponse.url) - \(httpResponse.allHeaderFields)")
+//  
+//    func transform(error: Error) -> Result<HTTPURLResponse, HTTPResponseError>
+//    {
+//      return Result(error: error._code == NSURLErrorCancelled ? .cancelled : .responseFailure(httpResponse))
+//    }
+//    
+//    return error.flatMap(transform) ?? Result(httpResponse)
+//  }
+//}
+//
+//func completionHandlerForRequest<R: HTTPResourceProtocol>
+//  (
+//    resource: R,
+//    validate: @escaping ResponseValidationFunction
+//  )
+//    -> (Data?, URLResponse?, Error?) -> Void
+//{
+//  return { (data, response, error) in
+//  
+//    _ = Result(response as? HTTPURLResponse, failWith: .invalidResponseType)
+//      >>- validateResponse(error)
+//      >>- validate(data)
+//      >>- resource.parse
+//
+////    completion(responseValue)
+//  }
+//}
+
+public class HTTPResponse<R, E: HTTPResourceError>: HTTPResponseProtocol
 {
-  public typealias ResponseType = R.ResourceType
+  public typealias ValueType = R
+  private var result: Result<R, E>?
   
-  var result: Result<ResponseType, HTTPResponseError>
-  public let progress: Progress?
+  private lazy var progress: Progress = Progress()
   let task: URLSessionTask?
   
-  init(task: URLSessionTask? = nil, result: Result<ResponseType, HTTPResponseError> = .failure(.unknown))
+  init(task: URLSessionTask? = nil)
   {
     self.task = task
-    self.progress = nil
-    self.result = result
   }
   
-//  func download<T>(f: (R.ResourceType) -> T) -> T
+  init(error: E)
+  {
+    task = nil
+    result = .failure(error)
+  }
+  
+  private func begin(task: URLSessionTask?)
+  {
+    guard let task = task else { return }
+    
+    log(level: .Debug, message: "Sending Request: \(task.currentRequest?.url)")
+    task.resume()
+  }
+  
+  private var progressHandler: ((Float) -> Void)?
+  @discardableResult
+  public func progress(_ handler: @escaping (Float) -> Void) -> Self
+  {
+    progressHandler = handler
+    return self
+  }
+  
+  private var observeHandler: ((Progress) -> Void)?
+  @discardableResult
+  public func observe(_ handler: @escaping (Progress) -> Void) -> Self
+  {
+    observeHandler = handler
+    return self
+  }
+
+  private var downloadHandler: ((R) -> URL)?
+  @discardableResult
+  public func download(_ transform: @escaping (R) -> URL) -> Self
+  {
+    //start request here if not started
+    downloadHandler = transform
+    return self
+  }
+  
+  private var completeHandler: ((R) -> Void)?
+  @discardableResult
+  public func complete(_ handler: @escaping (R) -> Void) -> Self
+  {
+    completeHandler = handler
+    //start request here if not started
+    begin(task: task)
+    return self
+  }
+
+  private var errorHandler: ((HTTPResponseError) -> Void)?
+  @discardableResult
+  public func error(_ handler: @escaping (HTTPResponseError) -> Void) -> Self
+  {
+    errorHandler = handler
+    return self
+  }
+}
+
+extension HTTPResponse: Hashable
+{
+  public var hashValue: Int
+  {
+    return 1
+  }
+
+  static public func ==(left: HTTPResponse, right: HTTPResponse) -> Bool
+  {
+    return true
+  }
+}
+
+
+struct AnyHTTPResponse
+{
+//  private let _progress: ((Float) -> Void) -> AnyHTTPResponse
+//  private let _observe: ((Progress) -> Void) -> AnyHTTPResponse
+//  private let download: ((AnyHTTPResponse) -> Void) -> AnyHTTPResponse
+
+  init<H>(_ response: H) where H: HTTPResponseProtocol
+  {
+//    _progress = { AnyHTTPResponse(response.progress($0)) }
+//    _observe = { AnyHTTPResponse(response.observe($0)) }
+  }
+}
+
+//extension AnyHTTPResponse: HTTPResponseProtocol
+//{
+//  func progress(_ handler: (Float) -> Void) -> AnyHTTPResponse
 //  {
-//    return result.map(f)
-////wait for response to complete
-////kick off download
-////    return f(self)
+//    
 //  }
+//}
+
+extension AnyHTTPResponse: Equatable
+{
+  static public func ==(left: AnyHTTPResponse, right: AnyHTTPResponse) -> Bool
+  {
+    return false
+  }
+}
+
+extension AnyHTTPResponse: Hashable
+{
+  public var hashValue: Int
+  {
+    return 1
+  }
 }
 

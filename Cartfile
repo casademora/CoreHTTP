@@ -1,4 +1,4 @@
 github "antitypical/Result"
 github "thoughtbot/Curry" ~> 3.0
 github "thoughtbot/Argo" ~> 4.0
-
+github "freshOS/then"

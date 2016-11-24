@@ -11,6 +11,8 @@ import Foundation
 public typealias AuthenticationToken = String
 public enum HTTPAuthenticationType
 {
+  typealias AuthenticateRequestFunction = (URLRequest) -> URLRequest
+
   case none
   case queryParameters(String, AuthenticationToken)
   case basic(AuthenticationToken)
@@ -38,7 +40,7 @@ public enum HTTPAuthenticationType
     }
   }
   
-  private func authentication() -> (URLRequest) -> URLRequest
+  private func authentication() -> AuthenticateRequestFunction
   {
     switch self
     {

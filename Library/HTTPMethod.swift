@@ -6,14 +6,13 @@
 //  Copyright © 2016 Magical Panda Software. All rights reserved.
 //
 
-public protocol HTTPMethodProtocol: RawRepresentable
+public protocol HTTPMethodProtocol: RawRepresentable, CustomStringConvertible
 {
-  var value: String { get }
 }
 
 extension HTTPMethodProtocol where RawValue == String
 {
-  public var value: String { return rawValue }
+  public var description: String { return rawValue }
 }
 
 public enum AnyHTTPMethod: String, HTTPMethodProtocol

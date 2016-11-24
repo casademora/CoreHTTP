@@ -6,6 +6,7 @@
 //  Copyright © 2016 Magical Panda Software. All rights reserved.
 //
 
+import Foundation
 import Result
 
 public typealias ResponseValidationFunction = (Data?) -> (HTTPURLResponse) -> Result<Data, HTTPResponseError>
@@ -27,7 +28,11 @@ public protocol HTTPHostProtocol: Hashable, HTTPResourceRequestable
 open class HTTPHost: HTTPHostProtocol
 {
   public let baseURLString: String
+  public private(set) lazy var baseURL: URL = URL(string: self.baseURLString) ?? URL(fileURLWithPath: "/")
+  public private(set) lazy var session: URLSession = self.buildSession()
+  private let configuration: URLSessionConfiguration
   
+  internal private(set) lazy var sessionDelegate: HTTPHostSessionDelegate = HTTPHostSessionDelegate()
   public let preprocessRequest: PreprocessRequestFunction?
   public let validate: ResponseValidationFunction
   public var authentication: GenerateAuthenticationCredentialsFunction
@@ -37,10 +42,7 @@ open class HTTPHost: HTTPHostProtocol
       rebuildSession()
     }
   }
-  public private(set) lazy var session: URLSession = self.buildSession()
-  
-  private let configuration: URLSessionConfiguration
-  
+
   public init(baseURLString: String,
               configuration: URLSessionConfiguration = .default,
               preprocessRequests: PreprocessRequestFunction? = nil,
@@ -68,7 +70,7 @@ open class HTTPHost: HTTPHostProtocol
   {
     let configuration = self.configuration
     self.applyAdditionalConfiguration(configuration)
-    return URLSession(configuration: configuration, delegate: nil, delegateQueue: nil)
+    return URLSession(configuration: configuration, delegate: sessionDelegate, delegateQueue: nil)
   }
   
   open func applyAdditionalConfiguration(_ configuration: URLSessionConfiguration)
@@ -87,11 +89,6 @@ open class HTTPHost: HTTPHostProtocol
 
 extension HTTPHost: Hashable
 {
-  public var baseURL: URL
-  {
-    return URL(string: baseURLString) ?? URL(fileURLWithPath: "/")
-  }
-  
   public var hashValue: Int
   {
     return baseURLString.hashValue
